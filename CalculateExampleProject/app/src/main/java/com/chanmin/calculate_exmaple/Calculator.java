@@ -29,7 +29,7 @@ public class Calculator extends AppCompatActivity {
         //실수형으로 형변환
         int value_int = Integer.parseInt(value);
         //정수형으로 형변환
-        if(value_float != 0)//0일때 제외
+        if(value_float != 0.0f)//0일때 제외
         {
             if(value_int == value_float)//소수점 이하자리의 값 없음
             {
@@ -63,67 +63,67 @@ public class Calculator extends AppCompatActivity {
         String value = sendingText.toString();
         int value_int = Integer.parseInt(value);
         float value_float = Integer.parseInt(value);
-        if(value_int == value_float)
+        if(value_int != value_float)
         {
             sendingText.setText(value);
         }else
         {
             value = value+"0";
-            sendingText.toString();
+            sendingText.setText(value);
         }
     }
     public void NineClicked(View v)
     {
         String value = sendingText.toString();
         value = value+"9";
-        sendingText.toString();
+        sendingText.setText(value);
     }
     public void EightClicked(View v)
     {
         String value = sendingText.toString();
         value = value+"8";
-        sendingText.toString();
+        sendingText.setText(value);
     }
     public void SevenClicked(View v)
     {
         String value = sendingText.toString();
         value = value+"7";
-        sendingText.toString();
+        sendingText.setText(value);
     }
     public void SixClicked(View v)
     {
         String value = sendingText.toString();
         value = value+"6";
-        sendingText.toString();
+        sendingText.setText(value);
     }
     public void FiveClicked(View v)
     {
         String value = sendingText.toString();
         value = value+"5";
-        sendingText.toString();
+        sendingText.setText(value);
     }
     public void FourClicked(View v)
     {
         String value = sendingText.toString();
         value = value+"4";
-        sendingText.toString();
+        sendingText.setText(value);
     }
     public void ThreeClicked(View v)
     {
         String value = sendingText.toString();
         value = value+"3";
-        sendingText.toString();
+        sendingText.setText(value);
     }
     public void TwoClicked(View v)
     {
         String value = sendingText.toString();
         value = value+"2";
-        sendingText.toString();
+        sendingText.setText(value);
     }
     public void OneClicked(View v)
     {
         String value = sendingText.toString();
         value = value+"1";
-        sendingText.toString();
+        sendingText.setText(value);
     }
 }
