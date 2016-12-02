@@ -12,7 +12,6 @@ public class Calculator extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.calculator_layout);
         sendingText =(TextView)findViewById(R.id.textView);
-
     }
     //TextView sendingText;
 
@@ -22,7 +21,6 @@ public class Calculator extends AppCompatActivity {
     }
     public void DeleteClicked(View v)
     {
-
     }
 
 }
