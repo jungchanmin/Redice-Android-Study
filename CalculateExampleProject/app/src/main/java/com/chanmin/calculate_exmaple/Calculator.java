@@ -1,5 +1,6 @@
 package com.chanmin.calculate_exmaple;
 
+import android.os.Debug;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -13,6 +14,8 @@ public class Calculator extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.calculator_layout);
         sendingText =(TextView)findViewById(R.id.textView);
+        String testing_var = sendingText.toString();
+        System.out.println("sendingText:" + testing_var);
     }
     //TextView sendingText;
 
@@ -23,7 +26,7 @@ public class Calculator extends AppCompatActivity {
     }
     public void DeleteClicked(View v)
     {
-        String value = sendingText.toString();
+        String value = sendingText.getText().toString();
         //텍스트뷰에서 가져온 값가공
         float value_float = Float.parseFloat(value);
         //실수형으로 형변환
@@ -60,13 +63,14 @@ public class Calculator extends AppCompatActivity {
     }//DeleteClicked의 종료
     public void ZeroClicked(View v)
     {
-        String value = sendingText.toString();
-        int value_int = Integer.parseInt(value);
+        String value = sendingText.getText().toString();
+
         float value_float = Integer.parseInt(value);
-        if(value_int != value_float)
+        if(value_float == 0.0f || value_float<1.0f)
         {
             sendingText.setText(value);
-        }else
+        }
+        else
         {
             value = value+"0";
             sendingText.setText(value);
@@ -74,56 +78,92 @@ public class Calculator extends AppCompatActivity {
     }
     public void NineClicked(View v)
     {
-        String value = sendingText.toString();
-        value = value+"9";
+        String value = sendingText.getText().toString();
+        float value_float = Float.parseFloat(value);
+        if(value_float == 0.0f)
+            value = "9";
+        else
+            value = value+"9";
         sendingText.setText(value);
     }
     public void EightClicked(View v)
     {
-        String value = sendingText.toString();
-        value = value+"8";
+        String value = sendingText.getText().toString();
+        float value_float = Float.parseFloat(value);
+        if(value_float == 0.0f)
+            value = "8";
+        else
+            value = value+"8";
         sendingText.setText(value);
     }
     public void SevenClicked(View v)
     {
-        String value = sendingText.toString();
-        value = value+"7";
+        String value = sendingText.getText().toString();
+        float value_float = Float.parseFloat(value);
+        if(value_float == 0.0f)
+            value = "7";
+        else
+            value = value+"7";
         sendingText.setText(value);
     }
     public void SixClicked(View v)
     {
-        String value = sendingText.toString();
-        value = value+"6";
+        String value = sendingText.getText().toString();
+        float value_float = Float.parseFloat(value);
+        if(value_float == 0.0f)
+            value = "6";
+        else
+            value = value+"6";
         sendingText.setText(value);
     }
     public void FiveClicked(View v)
     {
-        String value = sendingText.toString();
-        value = value+"5";
+        String value = sendingText.getText().toString();
+        float value_float = Float.parseFloat(value);
+        if(value_float == 0.0f)
+            value = "5";
+        else
+            value = value+"5";
         sendingText.setText(value);
     }
     public void FourClicked(View v)
     {
-        String value = sendingText.toString();
-        value = value+"4";
+        String value = sendingText.getText().toString();
+        float value_float = Float.parseFloat(value);
+        if(value_float == 0.0f)
+            value = "4";
+        else
+            value = value+"4";
         sendingText.setText(value);
     }
     public void ThreeClicked(View v)
     {
-        String value = sendingText.toString();
-        value = value+"3";
+        String value = sendingText.getText().toString();
+        float value_float = Float.parseFloat(value);
+        if(value_float == 0.0f)
+            value = "3";
+        else
+            value = value+"3";
         sendingText.setText(value);
     }
     public void TwoClicked(View v)
     {
-        String value = sendingText.toString();
-        value = value+"2";
+        String value = sendingText.getText().toString();
+        float value_float = Float.parseFloat(value);
+        if(value_float == 0.0f)
+            value = "2";
+        else
+            value = value+"2";
         sendingText.setText(value);
     }
     public void OneClicked(View v)
     {
-        String value = sendingText.toString();
-        value = value+"1";
+        String value = sendingText.getText().toString();
+        float value_float = Float.parseFloat(value);
+        if(value_float == 0.0f)
+            value = "1";
+        else
+            value = value+"1";
         sendingText.setText(value);
     }
 }
