@@ -41,18 +41,18 @@
             android:gravity="end">
 
             <Button
-                android:id="@+id/Clear"
+                android:id="@+id/clear"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="CLR"
-                android:onClick="ClearClicked" />
+                android:onClick="clearClicked" />
 
             <Button
-                android:id="@+id/Delete"
+                android:id="@+id/delete"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="DEL"
-                android:onClick="DeleteClicked" />
+                android:onClick="deleteClicked" />
 
         </LinearLayout>
 
@@ -63,32 +63,32 @@
             android:gravity="end">
 
             <Button
-                android:id="@+id/Seven"
+                android:id="@+id/seven"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="7"
-                android:onClick="SevenClicked" />
+                android:onClick="numberPadClicked" />
 
             <Button
-                android:id="@+id/Eight"
+                android:id="@+id/eight"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="8"
-                android:onClick="EightClicked" />
+                android:onClick="numberPadClicked" />
 
             <Button
-                android:id="@+id/Nine"
+                android:id="@+id/nine"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="9"
-                android:onClick="NineClicked" />
+                android:onClick="numberPadClicked" />
 
             <Button
-                android:id="@+id/Division"
+                android:id="@+id/division"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="/"
-                android:onClick="DivisionClicked" />
+                android:onClick="divisionClicked" />
 
         </LinearLayout>
 
@@ -99,32 +99,32 @@
             android:gravity="end">
 
             <Button
-                android:id="@+id/Six"
+                android:id="@+id/six"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="6"
-                android:onClick="SixClicked" />
+                android:onClick="numberPadClicked" />
 
             <Button
-                android:id="@+id/Five"
+                android:id="@+id/five"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="5"
-                android:onClick="FiveClicked" />
+                android:onClick="numberPadClicked" />
 
             <Button
-                android:id="@+id/Four"
+                android:id="@+id/four"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="4"
-                android:onClick="FourClicked" />
+                android:onClick="numberPadClicked" />
 
             <Button
-                android:id="@+id/Multiply"
+                android:id="@+id/multiply"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="*"
-                android:onClick="MultiplyClicked" />
+                android:onClick="multiplyClicked" />
 
         </LinearLayout>
 
@@ -135,32 +135,32 @@
             android:gravity="end">
 
             <Button
-                android:id="@+id/Three"
+                android:id="@+id/three"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="3"
-                android:onClick="ThreeClicked" />
+                android:onClick="numberPadClicked" />
 
             <Button
-                android:id="@+id/Two"
+                android:id="@+id/two"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="2"
-                android:onClick="TwoClicked" />
+                android:onClick="numberPadClicked" />
 
             <Button
-                android:id="@+id/One"
+                android:id="@+id/one"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="1"
-                android:onClick="OneClicked" />
+                android:onClick="numberPadClicked" />
 
             <Button
-                android:id="@+id/Subtract"
+                android:id="@+id/subtract"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="-"
-                android:onClick="SubtractClicked" />
+                android:onClick="subtractClicked" />
 
         </LinearLayout>
 
@@ -171,32 +171,32 @@
             android:gravity="end">
 
             <Button
-                android:id="@+id/Point"
+                android:id="@+id/point"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="."
-                android:onClick="PointClicked" />
+                android:onClick="pointClicked" />
 
             <Button
-                android:id="@+id/Zero"
+                android:id="@+id/zero"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="0"
-                android:onClick="ZeroClicked" />
+                android:onClick="numberPadClicked" />
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="="
-                android:id="@+id/Equal"
-                android:onClick="EqualClicked" />
+                android:id="@+id/equal"
+                android:onClick="equalClicked" />
 
             <Button
-                android:id="@+id/Addition"
+                android:id="@+id/addition"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="+"
-                android:onClick="AdditionClicked" />
+                android:onClick="additionClicked" />
 
         </LinearLayout>
 
