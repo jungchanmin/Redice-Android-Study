@@ -4,16 +4,45 @@ import android.os.Debug;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
+
+import static android.R.attr.button;
+import static android.R.id.button2;
 
 public class Calculator extends AppCompatActivity {
     TextView sendingText;
+    Button button1;
+    Button button2;
+    Button button3;
+    Button button4;
+    Button button5;
+    Button button6;
+    Button button7;
+    Button button8;
+    Button button9;
     float result;
+    float tempValue;
+    char operationSymbol;
+    Boolean isOperationSymbolExist;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.calculator_layout);
         sendingText =(TextView)findViewById(R.id.textView);
+        button1 = (Button)findViewById(R.id.one);
+        button2 = (Button)findViewById(R.id.two);
+        button3 = (Button)findViewById(R.id.three);
+        button4 = (Button)findViewById(R.id.four);
+        button5 = (Button)findViewById(R.id.five);
+        button6 = (Button)findViewById(R.id.six);
+        button7 = (Button)findViewById(R.id.seven);
+        button8 = (Button)findViewById(R.id.eight);
+        button9 = (Button)findViewById(R.id.nine);
+        isOperationSymbolExist = false;
+        operationSymbol ='N';
+        result = 0;
+        tempValue = 0;
     }
 
     public void clearClicked(View v)
@@ -22,40 +51,22 @@ public class Calculator extends AppCompatActivity {
         sendingText.setText("0");
     }
 
-    public void deleteClicked(View v)
-    {
+    public void deleteClicked(View v) {
         String value = sendingText.getText().toString();
-        //텍스트뷰에서 가져온 값가공
         float valueFloat = Float.parseFloat(value);
-        //실수형으로 형변환
-        int valueInt = Integer.parseInt(value);
-        //정수형으로 형변환
-        if(valueFloat != 0.0f)//0일때 제외
-        {
-            if(valueInt == valueFloat)//소수점 이하자리의 값 없음
-            {
-                valueInt = valueInt/10;
-                value = ""+valueInt;//스트링값으로 형변환
-                sendingText.setText(value);
-            }//
-            else//소수점 이하자리의 값이 존재함
-            {
-                float mockery = valueFloat-(float)valueInt;
-                if(mockery<10)
-                {
-                    value = ""+valueInt;
-                    sendingText.setText(value);
-                }//mockery가 10 이하일때(한자릿수 소수점)
-                else
-                {//소수점 두자릿수 이상의 실수. 연산으로 뽑아내기 매우 귀찮음
-                    int valueLength = value.length();//가져온 값의 길이계산
-                    value = value.substring(0,valueLength-1);//맨 끝자리를 제외한 문자열 추출
-                    sendingText.setText(value);
-                }//mockery가 10 이상일때
-            }//소수점 자릿수가 존재할때-else구문
+        int strimLength;
+        if(isOperationSymbolExist) {
+            strimLength = 3;
+            isOperationSymbolExist = false;
+            operationSymbol = 'N';
+        }else {
+            strimLength = 1;
         }
-        else
-        {
+        if (valueFloat != 0.0f) {
+            int valueLength = value.length();//가져온 값의 길이계산
+            value = value.substring(0, valueLength - strimLength);
+            sendingText.setText(value);
+        } else {
             sendingText.setText("0");
         }
     }//DeleteClicked의 종료
@@ -66,70 +77,86 @@ public class Calculator extends AppCompatActivity {
         float valueFloat = Float.parseFloat(value);//실수형으로 형변환
         int valueInt = Integer.parseInt(value);
         float mockery = valueFloat - (float)valueInt;
-        switch(v.getId())
-        {
-            case R.id.zero :
-                if(valueFloat == 0.0f || mockery > 0.0f);
-                //아무것도 실행하지 않음- 값이 0일때, 소수점이하값이 없을때
+        String buttonText = "";
+        switch(v.getId()) {
+            case R.id.zero:
+                if (valueFloat == 0.0f || mockery > 0.0f) ;
+                    //아무것도 실행하지 않음- 값이 0일때, 소수점이하값이 없을때
                 else
                     value += "0";
                 break;
-            case R.id.one :
-                if(valueFloat == 0.0f)
-                    value = "1";
-                else
-                    value += "1";
+            case R.id.one:
+                buttonText = button1.getText().toString();
                 break;
-            case R.id.two :
-                if(valueFloat == 0.0f)
-                    value = "2";
-                else
-                    value += "2";
+            case R.id.two:
+                buttonText = button2.getText().toString();
                 break;
-            case R.id.three :
-                if(valueFloat == 0.0f)
-                    value = "3";
-                else
-                    value += "3";
+            case R.id.three:
+                buttonText = button3.getText().toString();
                 break;
-            case R.id.four :
-                if(valueFloat == 0.0f)
-                    value = "4";
-                else
-                    value += "4";
+            case R.id.four:
+                buttonText = button4.getText().toString();
                 break;
-            case R.id.five :
-                if(valueFloat == 0.0f)
-                    value = "5";
-                else
-                    value += "5";
+            case R.id.five:
+                buttonText = button5.getText().toString();
                 break;
             case R.id.six:
-                if(valueFloat == 0.0f)
-                    value = "6";
-                else
-                    value += "6";
+                buttonText = button6.getText().toString();
                 break;
             case R.id.seven:
-                if(valueFloat == 0.0f)
-                    value = "7";
-                else
-                    value += "7";
+                buttonText = button7.getText().toString();
                 break;
             case R.id.eight:
-                if(valueFloat == 0.0f)
-                    value = "8";
-                else
-                    value += "8";
+                buttonText = button8.getText().toString();
                 break;
             case R.id.nine:
-                if(valueFloat == 0.0f)
-                    value = "9";
-                else
-                    value += "9";
+                buttonText = button9.getText().toString();
                 break;
         }
+        if(isOperationSymbolExist) {
+            switch(operationSymbol){
+                case '/':
+                    result = tempValue / valueFloat;
+                    break;
+                case '*':
+                    result = tempValue * valueFloat;
+                    break;
+                case '+':
+                    result = tempValue + valueFloat;
+                    break;
+                case '-':
+                    result = tempValue - valueFloat;
+                    break;
+            }
+            isOperationSymbolExist = false;
+            operationSymbol ='N';
+            tempValue = result;
+        }
+        if(valueFloat == 0.0f)
+            value = buttonText;
+        else
+            value +=buttonText;
       sendingText.setText(value);
     }
 
+    public void divisionClicked(View v){
+        String value = sendingText.toString();
+        float valueFloat = Float.parseFloat(value);
+        if(isOperationSymbolExist){
+            int valueLength = value.length();
+            value = value.substring(0,valueLength-3);
+            value += " / ";
+        }else{
+            isOperationSymbolExist = true;
+            value += " / ";
+        }
+        tempValue = valueFloat;
+        operationSymbol = '/';
+        sendingText.setText(value);
+    }
+    public void multiplyClicked(View v){}
+    public void subtractClicked(View v){}
+    public void additionClicked(View v){}
+    public void equalClicked(View v){}
+    public void pointClicked(View v){}
 }
