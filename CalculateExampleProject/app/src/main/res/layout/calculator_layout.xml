@@ -87,8 +87,8 @@
                 android:id="@+id/division"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="/"
-                android:onClick="divisionClicked" />
+                android:text=" / "
+                android:onClick="arbitraryOperatorsClicked" />
 
         </LinearLayout>
 
@@ -123,8 +123,8 @@
                 android:id="@+id/multiply"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="*"
-                android:onClick="multiplyClicked" />
+                android:text=" * "
+                android:onClick="arbitraryOperatorsClicked" />
 
         </LinearLayout>
 
@@ -159,8 +159,8 @@
                 android:id="@+id/subtract"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="-"
-                android:onClick="subtractClicked" />
+                android:text=" - "
+                android:onClick="arbitraryOperatorsClicked" />
 
         </LinearLayout>
 
@@ -187,7 +187,7 @@
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="="
+                android:text=" = "
                 android:id="@+id/equal"
                 android:onClick="equalClicked" />
 
@@ -195,8 +195,8 @@
                 android:id="@+id/addition"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="+"
-                android:onClick="additionClicked" />
+                android:text=" + "
+                android:onClick="arbitraryOperatorsClicked" />
 
         </LinearLayout>
 

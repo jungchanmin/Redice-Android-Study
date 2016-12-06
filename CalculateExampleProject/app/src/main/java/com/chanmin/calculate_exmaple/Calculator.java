@@ -21,10 +21,16 @@ public class Calculator extends AppCompatActivity {
     Button button7;
     Button button8;
     Button button9;
+    Button division;
+    Button multiply;
+    Button subtract;
+    Button addition;
+
     float result;
     float tempValue;
-    char operationSymbol;
+    String operationSymbol;
     Boolean isOperationSymbolExist;
+    Boolean isPointExist;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,8 +45,13 @@ public class Calculator extends AppCompatActivity {
         button7 = (Button)findViewById(R.id.seven);
         button8 = (Button)findViewById(R.id.eight);
         button9 = (Button)findViewById(R.id.nine);
+        division = (Button)findViewById(R.id.division);
+        multiply = (Button)findViewById(R.id.multiply);
+        subtract = (Button)findViewById(R.id.subtract);
+        addition = (Button)findViewById(R.id.addition);
         isOperationSymbolExist = false;
-        operationSymbol ='N';
+        isPointExist = false;
+        operationSymbol ="N";
         result = 0;
         tempValue = 0;
     }
@@ -48,26 +59,36 @@ public class Calculator extends AppCompatActivity {
     public void clearClicked(View v)
     {
         result = 0;
+        isOperationSymbolExist = false;
+        isPointExist = false;
+        operationSymbol = "N";
+        tempValue = 0;
         sendingText.setText("0");
     }
 
     public void deleteClicked(View v) {
         String value = sendingText.getText().toString();
         float valueFloat = Float.parseFloat(value);
-        int strimLength;
+        int valueInt = Integer.parseInt(value);
+        int cutPoint;
         if(isOperationSymbolExist) {
-            strimLength = 3;
+            cutPoint = 3;
             isOperationSymbolExist = false;
-            operationSymbol = 'N';
+            operationSymbol = "N";
         }else {
-            strimLength = 1;
+            cutPoint = 1;
         }
         if (valueFloat != 0.0f) {
             int valueLength = value.length();//가져온 값의 길이계산
-            value = value.substring(0, valueLength - strimLength);
+            value = value.substring(0, valueLength - cutPoint);
             sendingText.setText(value);
         } else {
             sendingText.setText("0");
+        }
+        if(isPointExist) {
+            if (valueFloat - (float) valueInt == 0.0f) {
+                isPointExist = false;
+            }
         }
     }//DeleteClicked의 종료
 
@@ -112,51 +133,98 @@ public class Calculator extends AppCompatActivity {
             case R.id.nine:
                 buttonText = button9.getText().toString();
                 break;
+            default:
+                break;
         }
         if(isOperationSymbolExist) {
             switch(operationSymbol){
-                case '/':
-                    result = tempValue / valueFloat;
+                case "/":
+                    if(tempValue == 0 || valueFloat == 0){
+                        result = 0;
+                    }else {
+                        result = tempValue / valueFloat;
+                    }
                     break;
-                case '*':
-                    result = tempValue * valueFloat;
+                case "*":
+                    if(tempValue == 0 || valueFloat == 0) {
+                        result = 0;
+                    }else{
+                        result = tempValue * valueFloat;
+                    }
                     break;
-                case '+':
+                case "+":
                     result = tempValue + valueFloat;
                     break;
-                case '-':
+                case "-":
                     result = tempValue - valueFloat;
                     break;
             }
             isOperationSymbolExist = false;
-            operationSymbol ='N';
+            operationSymbol ="N";
             tempValue = result;
         }
         if(valueFloat == 0.0f)
             value = buttonText;
         else
-            value +=buttonText;
+            value += buttonText;
       sendingText.setText(value);
     }
-
-    public void divisionClicked(View v){
+    public void arbitraryOperatorsClicked(View v)
+    {
+        String buttonText="";
         String value = sendingText.toString();
         float valueFloat = Float.parseFloat(value);
-        if(isOperationSymbolExist){
-            int valueLength = value.length();
-            value = value.substring(0,valueLength-3);
-            value += " / ";
-        }else{
-            isOperationSymbolExist = true;
-            value += " / ";
+        int valueLength = value.length();
+
+        switch(v.getId())
+        {
+            case R.id.division:
+                buttonText = division.getText().toString();
+                break;
+            case R.id.multiply:
+                buttonText = multiply.getText().toString();
+                break;
+            case R.id.subtract:
+                buttonText = subtract.getText().toString();
+                break;
+            case R.id.addition:
+                buttonText = subtract.getText().toString();
+                break;
+            default:
+                break;
         }
+        if(isOperationSymbolExist){
+            value = value.substring(0,valueLength-3);
+            value += buttonText;
+        } else {
+            isOperationSymbolExist = true;
+            value += buttonText;
+        }
+        isPointExist = false;
         tempValue = valueFloat;
-        operationSymbol = '/';
+        operationSymbol = buttonText.substring(1,valueLength-1);
         sendingText.setText(value);
     }
-    public void multiplyClicked(View v){}
-    public void subtractClicked(View v){}
-    public void additionClicked(View v){}
-    public void equalClicked(View v){}
-    public void pointClicked(View v){}
+    public void equalClicked(View v){
+        String value = sendingText.toString();
+        isOperationSymbolExist = false;
+        isPointExist = false;
+        operationSymbol = "N";
+        value = ""+result;
+        sendingText.setText(value);
+    }
+    public void pointClicked(View v){
+        String value = sendingText.toString();
+        if(isOperationSymbolExist) {
+            sendingText.setText(value);
+        }else{
+            if(!isPointExist){
+                sendingText.setText(value);
+            }else{
+                value += ".";
+                isPointExist = true;
+                sendingText.setText(value);
+            }
+        }
+    }
 }
