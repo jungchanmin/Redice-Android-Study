@@ -19,7 +19,7 @@
 
         <TextView
             android:id="@+id/textView"
-            android:text="0"
+            android:text=""
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -103,28 +103,28 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="6"
-                android:onClick="numberPadClicked" />
+                android:onClick= "numberPadClicked"/>
 
             <Button
                 android:id="@+id/five"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="5"
-                android:onClick="numberPadClicked" />
+                android:onClick= "numberPadClicked" />
 
             <Button
                 android:id="@+id/four"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="4"
-                android:onClick="numberPadClicked" />
+                android:onClick= "numberPadClicked" />
 
             <Button
                 android:id="@+id/multiply"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text=" * "
-                android:onClick="arbitraryOperatorsClicked" />
+                android:onClick= "arbitraryOperatorsClicked" />
 
         </LinearLayout>
 
@@ -139,28 +139,28 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="3"
-                android:onClick="numberPadClicked" />
+                android:onClick= "numberPadClicked" />
 
             <Button
                 android:id="@+id/two"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="2"
-                android:onClick="numberPadClicked" />
+                android:onClick= "numberPadClicked"/>
 
             <Button
                 android:id="@+id/one"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="1"
-                android:onClick="numberPadClicked" />
+                android:onClick= "numberPadClicked"/>
 
             <Button
                 android:id="@+id/subtract"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text=" - "
-                android:onClick="arbitraryOperatorsClicked" />
+                android:onClick= "arbitraryOperatorsClicked" />
 
         </LinearLayout>
 
@@ -175,28 +175,28 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="."
-                android:onClick="pointClicked" />
+                android:onClick= "pointClicked" />
 
             <Button
                 android:id="@+id/zero"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="0"
-                android:onClick="numberPadClicked" />
+                android:onClick= "numberPadClicked" />
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text=" = "
                 android:id="@+id/equal"
-                android:onClick="equalClicked" />
+                android:onClick= "equalClicked" />
 
             <Button
                 android:id="@+id/addition"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text=" + "
-                android:onClick="arbitraryOperatorsClicked" />
+                android:onClick= "arbitraryOperatorsClicked" />
 
         </LinearLayout>
 

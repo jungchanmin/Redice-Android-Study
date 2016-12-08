@@ -8,223 +8,193 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import static android.R.attr.button;
+import static android.R.attr.id;
 import static android.R.id.button2;
 
 public class Calculator extends AppCompatActivity {
     TextView sendingText;
-    Button button1;
-    Button button2;
-    Button button3;
-    Button button4;
-    Button button5;
-    Button button6;
-    Button button7;
-    Button button8;
-    Button button9;
-    Button division;
-    Button multiply;
-    Button subtract;
-    Button addition;
-
-    float result;
-    float tempValue;
-    String operationSymbol;
-    Boolean isOperationSymbolExist;
-    Boolean isPointExist;
+    String [] number;
+    String tempNumber;
+    String [] operation;
+    String tempOperation;
+    int countInt;
+    int countString;
+    boolean stringBoll;
+    boolean intBoll;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.calculator_layout);
         sendingText =(TextView)findViewById(R.id.textView);
-        button1 = (Button)findViewById(R.id.one);
-        button2 = (Button)findViewById(R.id.two);
-        button3 = (Button)findViewById(R.id.three);
-        button4 = (Button)findViewById(R.id.four);
-        button5 = (Button)findViewById(R.id.five);
-        button6 = (Button)findViewById(R.id.six);
-        button7 = (Button)findViewById(R.id.seven);
-        button8 = (Button)findViewById(R.id.eight);
-        button9 = (Button)findViewById(R.id.nine);
-        division = (Button)findViewById(R.id.division);
-        multiply = (Button)findViewById(R.id.multiply);
-        subtract = (Button)findViewById(R.id.subtract);
-        addition = (Button)findViewById(R.id.addition);
-        isOperationSymbolExist = false;
-        isPointExist = false;
-        operationSymbol ="N";
-        result = 0;
-        tempValue = 0;
+        tempNumber = "";
+        tempOperation = "";
+        number = new String[100];
+        operation = new String[100];
+        stringBoll = false;
+        intBoll = false;
+        countInt = 0;
+        countString = 0;
     }
 
     public void clearClicked(View v)
     {
-        result = 0;
-        isOperationSymbolExist = false;
-        isPointExist = false;
-        operationSymbol = "N";
-        tempValue = 0;
-        sendingText.setText("0");
+        for(int i =0; i<100; i++){
+            number[i]="0";
+            operation[i] = "";
+        }
+        tempNumber = "0";
+        tempOperation = "";
+        sendingText.setText("");
+        countInt = 0;
+        countString = 0;
+        intBoll = false;
+        stringBoll = false;
     }
 
-    public void deleteClicked(View v) {
+    public void deleteClicked(View v) {}
+
+    public void equalClicked(View v){
         String value = sendingText.getText().toString();
-        float valueFloat = Float.parseFloat(value);
-        int valueInt = Integer.parseInt(value);
-        int cutPoint;
-        if(isOperationSymbolExist) {
-            cutPoint = 3;
-            isOperationSymbolExist = false;
-            operationSymbol = "N";
-        }else {
-            cutPoint = 1;
+        float result = 0;
+        int count=0;
+        if(intBoll) {
+            number[countInt] = tempNumber;
+            tempNumber = "0";
+            countInt++;
+            intBoll = false;
         }
-        if (valueFloat != 0.0f) {
-            int valueLength = value.length();//가져온 값의 길이계산
-            value = value.substring(0, valueLength - cutPoint);
-            sendingText.setText(value);
-        } else {
-            sendingText.setText("0");
-        }
-        if(isPointExist) {
-            if (valueFloat - (float) valueInt == 0.0f) {
-                isPointExist = false;
+        for(int i=0; i<100; i+=2) {
+
+            if (number[i + 1] != null) {
+                System.out.println("operation[count]:" + operation[count] + " count:" + count);
+                switch (operation[count]) {
+                    case "/":
+                        result += Float.parseFloat(number[i]) / Float.parseFloat(number[i + 1]);
+                        break;
+                    case "*":
+                        result += Float.parseFloat(number[i]) * Float.parseFloat(number[i + 1]);
+                        break;
+                    case "-":
+                        result += Float.parseFloat(number[i]) - Float.parseFloat(number[i + 1]);
+                        break;
+                    case "+":
+                        System.out.println("number[i]:" + number[i] + " number[i+1]:" + number[i + 1]);
+                        result += Float.parseFloat(number[i]) + Float.parseFloat(number[i + 1]);
+                        break;
+                }
+                count++;
+            } else if (number[i] != null) {
+                switch (operation[count]) {
+                    case "/":
+                        result /= Float.parseFloat(number[i]);
+                        break;
+                    case "*":
+                        result *= Float.parseFloat(number[i]);
+                        break;
+                    case "-":
+                        result -= Float.parseFloat(number[i]);
+                        break;
+                    case "+":
+                        result += Float.parseFloat(number[i]);
+                        break;
+                }
+            } else {
+                break;
             }
         }
-    }//DeleteClicked의 종료
+        value += "="+result;
+        sendingText.setText(value);
+    }
 
+    public void pointClicked(View v){}
     public void numberPadClicked(View v)
     {
-        String value = sendingText.getText().toString();//현재 스크린 상에 표시되고 있는 값 가져옴(스트링값)
-        float valueFloat = Float.parseFloat(value);//실수형으로 형변환
-        int valueInt = Integer.parseInt(value);
-        float mockery = valueFloat - (float)valueInt;
-        String buttonText = "";
-        switch(v.getId()) {
+        String value = sendingText.getText().toString();
+        int idCode = 0;
+        switch(v.getId()){
             case R.id.zero:
-                if (valueFloat == 0.0f || mockery > 0.0f) ;
-                    //아무것도 실행하지 않음- 값이 0일때, 소수점이하값이 없을때
-                else
-                    value += "0";
+                idCode = 0;
                 break;
             case R.id.one:
-                buttonText = button1.getText().toString();
+                idCode = 1;
                 break;
             case R.id.two:
-                buttonText = button2.getText().toString();
+                idCode = 2;
                 break;
             case R.id.three:
-                buttonText = button3.getText().toString();
+                idCode = 3;
                 break;
             case R.id.four:
-                buttonText = button4.getText().toString();
+                idCode = 4;
                 break;
             case R.id.five:
-                buttonText = button5.getText().toString();
+                idCode = 5;
                 break;
             case R.id.six:
-                buttonText = button6.getText().toString();
+                idCode = 6;
                 break;
             case R.id.seven:
-                buttonText = button7.getText().toString();
+                idCode = 7;
                 break;
             case R.id.eight:
-                buttonText = button8.getText().toString();
+                idCode = 8;
                 break;
             case R.id.nine:
-                buttonText = button9.getText().toString();
-                break;
-            default:
+                idCode = 9;
                 break;
         }
-        if(isOperationSymbolExist) {
-            switch(operationSymbol){
-                case "/":
-                    if(tempValue == 0 || valueFloat == 0){
-                        result = 0;
-                    }else {
-                        result = tempValue / valueFloat;
-                    }
-                    break;
-                case "*":
-                    if(tempValue == 0 || valueFloat == 0) {
-                        result = 0;
-                    }else{
-                        result = tempValue * valueFloat;
-                    }
-                    break;
-                case "+":
-                    result = tempValue + valueFloat;
-                    break;
-                case "-":
-                    result = tempValue - valueFloat;
-                    break;
-            }
-            isOperationSymbolExist = false;
-            operationSymbol ="N";
-            tempValue = result;
+        value += ""+idCode;
+        tempNumber += ""+idCode;
+        if(stringBoll){
+            operation[countString] = tempOperation;
+            System.out.println("tempOperation의 값:"+tempOperation);
+            System.out.println("operation[countString]의 값:"+operation[countString]+"countString의 값:"+countString);
+            tempOperation = "";
+            countString++;
+            stringBoll = false;
         }
-        if(valueFloat == 0.0f)
-            value = buttonText;
-        else
-            value += buttonText;
-      sendingText.setText(value);
+        intBoll = true;
+        sendingText.setText(value);
     }
     public void arbitraryOperatorsClicked(View v)
     {
-        String buttonText="";
-        String value = sendingText.toString();
-        float valueFloat = Float.parseFloat(value);
-        int valueLength = value.length();
-
+        String value = sendingText.getText().toString();
+        String idCode="";
         switch(v.getId())
         {
             case R.id.division:
-                buttonText = division.getText().toString();
+                idCode = "/";
                 break;
             case R.id.multiply:
-                buttonText = multiply.getText().toString();
+                idCode = "*";
                 break;
             case R.id.subtract:
-                buttonText = subtract.getText().toString();
+                idCode = "-";
                 break;
             case R.id.addition:
-                buttonText = subtract.getText().toString();
+                idCode = "+";
                 break;
             default:
                 break;
         }
-        if(isOperationSymbolExist){
-            value = value.substring(0,valueLength-3);
-            value += buttonText;
-        } else {
-            isOperationSymbolExist = true;
-            value += buttonText;
-        }
-        isPointExist = false;
-        tempValue = valueFloat;
-        operationSymbol = buttonText.substring(1,valueLength-1);
-        sendingText.setText(value);
-    }
-    public void equalClicked(View v){
-        String value = sendingText.toString();
-        isOperationSymbolExist = false;
-        isPointExist = false;
-        operationSymbol = "N";
-        value = ""+result;
-        sendingText.setText(value);
-    }
-    public void pointClicked(View v){
-        String value = sendingText.toString();
-        if(isOperationSymbolExist) {
-            sendingText.setText(value);
+        tempOperation = idCode;
+        if(stringBoll){
+            int valueLength = value.length();
+            value = value.substring(0,valueLength-1);
+            value += ""+idCode;
         }else{
-            if(!isPointExist){
-                sendingText.setText(value);
-            }else{
-                value += ".";
-                isPointExist = true;
-                sendingText.setText(value);
-            }
+            value += ""+idCode;
         }
+        if(intBoll) {
+            number[countInt] = tempNumber;
+            System.out.println("tempNumber의 값:"+tempNumber);
+            System.out.println("number[countInt]의 값:"+number[countInt]+"countInt의 값:"+countInt);
+            tempNumber = "";
+            countInt++;
+            intBoll = false;
+        }
+        stringBoll =  true;
+        sendingText.setText(value);
     }
+
 }
