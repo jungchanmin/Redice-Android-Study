@@ -51,7 +51,61 @@ public class Calculator extends AppCompatActivity {
         stringBoll = false;
     }
 
-    public void deleteClicked(View v) {}
+    public void deleteClicked(View v) {
+        String value = sendingText.getText().toString();
+            int valueLength = value.length();
+            value = value.substring(0, valueLength - 1);
+            sendingText.setText(value);
+            if (intBoll) {
+                if (Float.parseFloat(tempNumber) > 10) {
+                    int tempNumberLength = tempNumber.length();
+                    tempNumber = tempNumber.substring(0, tempNumberLength - 1);
+                } else {
+                    tempNumber = "0";
+                    number[countInt] = "0";
+                    valueLength = value.length();
+                    if(valueLength > 1){
+                    String tempValue = value.substring(valueLength - 1, valueLength);
+                        switch (tempValue) {
+                            case "/":
+                                countString--;
+                                tempOperation = "/";
+                                stringBoll = true;
+                                intBoll = false;
+                                break;
+                            case "*":
+                                countString--;
+                                tempOperation = "*";
+                                stringBoll = true;
+                                intBoll = false;
+                                break;
+                            case "-":
+                                countString--;
+                                tempOperation = "-";
+                                stringBoll = true;
+                                intBoll = false;
+                                break;
+                            case "+":
+                                countString--;
+                                tempOperation = "+";
+                                stringBoll = true;
+                                intBoll = false;
+                                break;
+                            case "=":
+                                sendingText.setText(value.substring(0, valueLength - 1));
+                                break;
+                        }
+                    }
+                }
+            }
+            if (stringBoll) {
+                operation[countString] = "";
+                tempOperation = "";
+                countString--;
+                stringBoll = false;
+                intBoll = true;
+            }
+        }
 
     public void equalClicked(View v){
         String value = sendingText.getText().toString();
@@ -66,7 +120,7 @@ public class Calculator extends AppCompatActivity {
         for(int i=0; i<100; i+=2) {
 
             if (number[i + 1] != null) {
-                System.out.println("operation[count]:" + operation[count] + " count:" + count);
+                //System.out.println("operation[count]:" + operation[count] + " count:" + count);
                 switch (operation[count]) {
                     case "/":
                         result += Float.parseFloat(number[i]) / Float.parseFloat(number[i + 1]);
@@ -78,7 +132,7 @@ public class Calculator extends AppCompatActivity {
                         result += Float.parseFloat(number[i]) - Float.parseFloat(number[i + 1]);
                         break;
                     case "+":
-                        System.out.println("number[i]:" + number[i] + " number[i+1]:" + number[i + 1]);
+                        //System.out.println("number[i]:" + number[i] + " number[i+1]:" + number[i + 1]);
                         result += Float.parseFloat(number[i]) + Float.parseFloat(number[i + 1]);
                         break;
                 }
@@ -107,8 +161,7 @@ public class Calculator extends AppCompatActivity {
     }
 
     public void pointClicked(View v){}
-    public void numberPadClicked(View v)
-    {
+    public void numberPadClicked(View v) {
         String value = sendingText.getText().toString();
         int idCode = 0;
         switch(v.getId()){
@@ -147,8 +200,8 @@ public class Calculator extends AppCompatActivity {
         tempNumber += ""+idCode;
         if(stringBoll){
             operation[countString] = tempOperation;
-            System.out.println("tempOperation의 값:"+tempOperation);
-            System.out.println("operation[countString]의 값:"+operation[countString]+"countString의 값:"+countString);
+            //System.out.println("tempOperation의 값:"+tempOperation);
+            //System.out.println("operation[countString]의 값:"+operation[countString]+"countString의 값:"+countString);
             tempOperation = "";
             countString++;
             stringBoll = false;
@@ -156,8 +209,7 @@ public class Calculator extends AppCompatActivity {
         intBoll = true;
         sendingText.setText(value);
     }
-    public void arbitraryOperatorsClicked(View v)
-    {
+    public void arbitraryOperatorsClicked(View v) {
         String value = sendingText.getText().toString();
         String idCode="";
         switch(v.getId())
@@ -187,8 +239,8 @@ public class Calculator extends AppCompatActivity {
         }
         if(intBoll) {
             number[countInt] = tempNumber;
-            System.out.println("tempNumber의 값:"+tempNumber);
-            System.out.println("number[countInt]의 값:"+number[countInt]+"countInt의 값:"+countInt);
+            //System.out.println("tempNumber의 값:"+tempNumber);
+            //System.out.println("number[countInt]의 값:"+number[countInt]+"countInt의 값:"+countInt);
             tempNumber = "";
             countInt++;
             intBoll = false;
