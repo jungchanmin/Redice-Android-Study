@@ -62,7 +62,9 @@ public class Calculator extends AppCompatActivity {
             if (intBoll) {
                 if (Float.parseFloat(tempNumber) > 10) {
                     int tempNumberLength = tempNumber.length();
-                    tempNumber = tempNumber.substring(0, tempNumberLength - 1);
+                    //System.out.println("수정하기 전의 tempNumber의 값: "+tempNumber);
+                    tempNumber = tempNumber.substring(0, tempNumberLength - 3);
+                    //System.out.println("수정한 후의 tempNumber의 값: "+tempNumber);
                 } else {
                     tempNumber = "0";
                     number[countInt] = "0";
@@ -127,7 +129,7 @@ public class Calculator extends AppCompatActivity {
         int operationLength = operation.length;
         for(int i=0; i<operationLength; i++){
             for(int j=0; j < operationLength; j++){
-
+                //if(operation == )
             }
         }
 
