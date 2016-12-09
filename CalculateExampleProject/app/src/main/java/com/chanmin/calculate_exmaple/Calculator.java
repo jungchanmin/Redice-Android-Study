@@ -124,14 +124,12 @@ public class Calculator extends AppCompatActivity {
             countInt++;
             intBoll = false;
         }
-        /*int operationLength = operation.length;
+        int operationLength = operation.length;
         for(int i=0; i<operationLength; i++){
-            if(!usedPriority[i]){
-                usedPriority[count] = true;
-                calculationOrder[i] = i;
-                count++;
+            for(int j=0; j < operationLength; j++){
+
             }
-        }*/
+        }
 
         for(int i=0; i<100; i+=2) {
 
@@ -172,7 +170,13 @@ public class Calculator extends AppCompatActivity {
                 break;
             }
         }
-        value += "="+result;
+        int resultInt = (int)result;
+        float mockery = result - (float)resultInt;
+        if(mockery == 0){
+            value = ""+resultInt;
+        }else {
+            value = "" + result;
+        }
         sendingText.setText(value);
 
         for(int i =0; i<100; i++){
