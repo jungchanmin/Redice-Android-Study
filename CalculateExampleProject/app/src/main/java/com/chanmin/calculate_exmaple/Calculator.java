@@ -21,6 +21,7 @@ public class Calculator extends AppCompatActivity {
     int countString;
     boolean stringBoll;
     boolean intBoll;
+    boolean breaker;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +35,7 @@ public class Calculator extends AppCompatActivity {
         intBoll = false;
         countInt = 0;
         countString = 0;
+        breaker = false;
     }
 
     public void clearClicked(View v)
@@ -49,6 +51,7 @@ public class Calculator extends AppCompatActivity {
         countString = 0;
         intBoll = false;
         stringBoll = false;
+        breaker = false;
     }
 
     public void deleteClicked(View v) {
@@ -111,12 +114,25 @@ public class Calculator extends AppCompatActivity {
         String value = sendingText.getText().toString();
         float result = 0;
         int count=0;
+        int calculationOrder[] = new int[100];
+        boolean usedPriority[] = new boolean[100];
+        boolean priority = false;
+
         if(intBoll) {
             number[countInt] = tempNumber;
             tempNumber = "0";
             countInt++;
             intBoll = false;
         }
+        /*int operationLength = operation.length;
+        for(int i=0; i<operationLength; i++){
+            if(!usedPriority[i]){
+                usedPriority[count] = true;
+                calculationOrder[i] = i;
+                count++;
+            }
+        }*/
+
         for(int i=0; i<100; i+=2) {
 
             if (number[i + 1] != null) {
@@ -158,6 +174,19 @@ public class Calculator extends AppCompatActivity {
         }
         value += "="+result;
         sendingText.setText(value);
+
+        for(int i =0; i<100; i++){
+            number[i]="0";
+            operation[i] = "";
+        }
+        number[0] = ""+result;
+        tempNumber = ""+result;
+        tempOperation = "";
+        countInt = 0;
+        countString = 0;
+        intBoll = true;
+        stringBoll = false;
+        breaker = false;
     }
 
     public void pointClicked(View v){}
@@ -211,42 +240,44 @@ public class Calculator extends AppCompatActivity {
     }
     public void arbitraryOperatorsClicked(View v) {
         String value = sendingText.getText().toString();
-        String idCode="";
-        switch(v.getId())
-        {
-            case R.id.division:
-                idCode = "/";
-                break;
-            case R.id.multiply:
-                idCode = "*";
-                break;
-            case R.id.subtract:
-                idCode = "-";
-                break;
-            case R.id.addition:
-                idCode = "+";
-                break;
-            default:
-                break;
+        String idCode = "";
+        System.out.println("breaker:"+breaker);
+        if (!intBoll && !stringBoll || tempOperation != "" || !breaker) {
+            switch (v.getId()) {
+                case R.id.division:
+                    idCode = "/";
+                    break;
+                case R.id.multiply:
+                    idCode = "*";
+                    break;
+                case R.id.subtract:
+                    idCode = "-";
+                    break;
+                case R.id.addition:
+                    idCode = "+";
+                    break;
+                default:
+                    break;
+            }
+            tempOperation = idCode;
+            if (stringBoll) {
+                int valueLength = value.length();
+                value = value.substring(0, valueLength - 1);
+                value += "" + idCode;
+            } else {
+                value += "" + idCode;
+            }
+            if (intBoll) {
+                number[countInt] = tempNumber;
+                //System.out.println("tempNumber의 값:"+tempNumber);
+                //System.out.println("number[countInt]의 값:"+number[countInt]+"countInt의 값:"+countInt);
+                tempNumber = "";
+                countInt++;
+                intBoll = false;
+                breaker = true;
+            }
+            stringBoll = true;
+            sendingText.setText(value);
         }
-        tempOperation = idCode;
-        if(stringBoll){
-            int valueLength = value.length();
-            value = value.substring(0,valueLength-1);
-            value += ""+idCode;
-        }else{
-            value += ""+idCode;
-        }
-        if(intBoll) {
-            number[countInt] = tempNumber;
-            //System.out.println("tempNumber의 값:"+tempNumber);
-            //System.out.println("number[countInt]의 값:"+number[countInt]+"countInt의 값:"+countInt);
-            tempNumber = "";
-            countInt++;
-            intBoll = false;
-        }
-        stringBoll =  true;
-        sendingText.setText(value);
     }
-
 }
