@@ -313,6 +313,7 @@ public class Calculator extends AppCompatActivity {
                 countInt++;
                 intBoll = false;
                 breaker = true;
+                isPointClick = false;
             }
             stringBoll = true;
             sendingText.setText(value);
