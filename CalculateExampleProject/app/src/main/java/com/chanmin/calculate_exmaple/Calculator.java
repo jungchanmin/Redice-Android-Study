@@ -153,6 +153,7 @@ public class Calculator extends AppCompatActivity {
             tempNumber = "0";
             countInt++;
             intBoll = false;
+            isPointClick = false;
         }
         for(int i=0; i<100; i+=2) {
             System.out.println("i의 값: "+i+" number[i]의 값 : "+number[i]+" number[i+1]의 값: "+number[i+1]);
