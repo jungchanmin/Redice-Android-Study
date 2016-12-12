@@ -22,6 +22,8 @@ public class Calculator extends AppCompatActivity {
     boolean stringBoll;
     boolean intBoll;
     boolean breaker;
+    boolean isPointClick;
+    int oneLimit;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,10 +38,11 @@ public class Calculator extends AppCompatActivity {
         countInt = 0;
         countString = 0;
         breaker = false;
+        isPointClick = false;
+        oneLimit = 1;
     }
 
-    public void clearClicked(View v)
-    {
+    public void clearClicked(View v) {
         for(int i =0; i<100; i++){
             number[i]="0";
             operation[i] = "";
@@ -52,24 +55,35 @@ public class Calculator extends AppCompatActivity {
         intBoll = false;
         stringBoll = false;
         breaker = false;
+        isPointClick = false;
     }
 
     public void deleteClicked(View v) {
         String value = sendingText.getText().toString();
-            int valueLength = value.length();
-            value = value.substring(0, valueLength - 1);
-            sendingText.setText(value);
-            if (intBoll) {
-                if (Float.parseFloat(tempNumber) > 10) {
-                    int tempNumberLength = tempNumber.length();
-                    //System.out.println("수정하기 전의 tempNumber의 값: "+tempNumber);
-                    tempNumber = tempNumber.substring(0, tempNumberLength - 3);
-                    //System.out.println("수정한 후의 tempNumber의 값: "+tempNumber);
-                } else {
+        int valueLength = value.length();
+        value = value.substring(0 , valueLength - 1);
+        valueLength = value.length();
+        String character = value.substring(valueLength - 1 , valueLength);
+        sendingText.setText(value);
+        System.out.println("tempNumber: "+tempNumber);
+       if (intBoll) {
+            if (Float.parseFloat(tempNumber) > 10) {
+                int tempNumberLength = tempNumber.length();
+                System.out.println("수정하기 전의 tempNumber의 값: "+tempNumber);
+                tempNumber = tempNumber.substring(0, tempNumberLength - 1);
+                System.out.println("수정한 후의 tempNumber의 값: "+tempNumber);
+            } else {
+                if(!character.equals(".") && oneLimit == 1){
                     tempNumber = "0";
                     number[countInt] = "0";
-                    valueLength = value.length();
-                    if(valueLength > 1){
+                    System.out.println("tempNumber의 값이 10보다 작고, character의 값이 .이 아님");
+                }else{
+                    int tempLength = tempNumber.length();
+                    tempNumber = tempNumber.substring(0 , tempLength-1);
+                    oneLimit = oneLimit * -1;
+                }
+                valueLength = value.length();
+                if(valueLength > 1 && !character.equals(".")){
                     String tempValue = value.substring(valueLength - 1, valueLength);
                         switch (tempValue) {
                             case "/":
@@ -115,28 +129,35 @@ public class Calculator extends AppCompatActivity {
     public void equalClicked(View v){
         String value = sendingText.getText().toString();
         float result = 0;
-        int count=0;
+        int count = 0;
         int calculationOrder[] = new int[100];
-        boolean usedPriority[] = new boolean[100];
-        boolean priority = false;
-
+        for(int i = 0; i<100; i++){
+            calculationOrder[i] = 0;
+        }
+        int operationCount = 0;
+        int operationLength = operation.length;
+        for(int i=0; i<operationLength; i++){
+            if(operation[i] == "*" || operation[i] == "/"){
+                calculationOrder[count] = i;
+                operationCount++;
+            }
+        }
+        for(int i=0; i<operationLength; i++){
+            if(operation[i] == "-" || operation[i] == "+"){
+                calculationOrder[count] = i;
+                operationCount++;
+            }
+        }
         if(intBoll) {
             number[countInt] = tempNumber;
             tempNumber = "0";
             countInt++;
             intBoll = false;
         }
-        int operationLength = operation.length;
-        for(int i=0; i<operationLength; i++){
-            for(int j=0; j < operationLength; j++){
-                //if(operation == )
-            }
-        }
-
         for(int i=0; i<100; i+=2) {
-
+            System.out.println("i의 값: "+i+" number[i]의 값 : "+number[i]+" number[i+1]의 값: "+number[i+1]);
             if (number[i + 1] != null) {
-                //System.out.println("operation[count]:" + operation[count] + " count:" + count);
+                System.out.println("operation[count]:" + operation[count] + " count:" + count);
                 switch (operation[count]) {
                     case "/":
                         result += Float.parseFloat(number[i]) / Float.parseFloat(number[i + 1]);
@@ -156,10 +177,10 @@ public class Calculator extends AppCompatActivity {
             } else if (number[i] != null) {
                 switch (operation[count]) {
                     case "/":
-                        result /= Float.parseFloat(number[i]);
+                        result = result / Float.parseFloat(number[i]);
                         break;
                     case "*":
-                        result *= Float.parseFloat(number[i]);
+                        result = result * Float.parseFloat(number[i]);
                         break;
                     case "-":
                         result -= Float.parseFloat(number[i]);
@@ -195,7 +216,17 @@ public class Calculator extends AppCompatActivity {
         breaker = false;
     }
 
-    public void pointClicked(View v){}
+    public void pointClicked(View v){
+        String value = sendingText.getText().toString();
+        if(intBoll) {
+            if(!isPointClick) {
+                value += ".";
+                tempNumber += ".";
+                sendingText.setText(value);
+                isPointClick = true;
+            }
+        }
+    }
     public void numberPadClicked(View v) {
         String value = sendingText.getText().toString();
         int idCode = 0;
