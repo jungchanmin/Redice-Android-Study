@@ -65,70 +65,41 @@ public class Calculator extends AppCompatActivity {
     public void deleteClicked(View v) {
         String value = sendingText.getText().toString();
         int valueLength = value.length();
-        value = value.substring(0 , valueLength - 1);
-        valueLength = value.length();
-        String character = value.substring(valueLength - 1 , valueLength);
-        sendingText.setText(value);
-        //System.out.println("tempNumber: "+tempNumber);
-       if (intBoll) {
-            if (Float.parseFloat(tempNumber) > 10) {
-                int tempNumberLength = tempNumber.length();
-                //System.out.println("수정하기 전의 tempNumber의 값: "+tempNumber);
-                tempNumber = tempNumber.substring(0, tempNumberLength - 1);
-                //System.out.println("수정한 후의 tempNumber의 값: "+tempNumber);
-            } else {
-                if(!character.equals(".") && oneLimit == 1){
-                    tempNumber = "0";
-                    number[countInt] = "0";
-                    //System.out.println("tempNumber의 값이 10보다 작고, character의 값이 .이 아님");
-                }else{
-                    int tempLength = tempNumber.length();
-                    tempNumber = tempNumber.substring(0 , tempLength-1);
-                    oneLimit = oneLimit * -1;
-                }
-                valueLength = value.length();
-                if(valueLength > 1 && !character.equals(".")){
-                    String tempValue = value.substring(valueLength - 1, valueLength);
-                        switch (tempValue) {
-                            case "/":
-                                countString--;
-                                tempOperation = "/";
-                                stringBoll = true;
-                                intBoll = false;
-                                break;
-                            case "*":
-                                countString--;
-                                tempOperation = "*";
-                                stringBoll = true;
-                                intBoll = false;
-                                break;
-                            case "-":
-                                countString--;
-                                tempOperation = "-";
-                                stringBoll = true;
-                                intBoll = false;
-                                break;
-                            case "+":
-                                countString--;
-                                tempOperation = "+";
-                                stringBoll = true;
-                                intBoll = false;
-                                break;
-                            case "=":
-                                sendingText.setText(value.substring(0, valueLength - 1));
-                                break;
-                        }
-                    }
-                }
+        if(valueLength > 0) {
+            String smallSlicedPiece = value.substring(valueLength - 1, valueLength);
+            String bigSlicedPiece = "";
+            value = value.substring(0, valueLength - 1);
+            sendingText.setText(value);
+            int tempNumberLength = tempNumber.length();
+            if(tempNumberLength > 2){
+                bigSlicedPiece = tempNumber.substring(tempNumberLength - 2 , tempNumberLength);
             }
-            if (stringBoll) {
-                operation[countString] = "";
-                tempOperation = "";
-                countString--;
+            System.out.println("bigSlicedPiece:" + bigSlicedPiece);
+            if (smallSlicedPiece.equals("/") || smallSlicedPiece.equals("*") || smallSlicedPiece.equals("+") || smallSlicedPiece.equals("-")) {
                 stringBoll = false;
                 intBoll = true;
+                tempOperation = "";
+                countInt--;
+                tempNumber = number[countInt];
+            } else if (bigSlicedPiece.equals(".0")) {
+                if (Float.parseFloat(tempNumber) < 10) {
+                    tempNumber = "";
+                    if (countString > 0) {
+                        intBoll = false;
+                        stringBoll = true;
+                        countString--;
+                        tempOperation = operation[countString];
+                    }
+                } else {
+                    tempNumber = tempNumber.substring(0, tempNumberLength - 3);
+                }
+            } else {
+                System.out.println("tempNumber의 값:" + tempNumber);
+                tempNumber = tempNumber.substring(0, tempNumberLength - 1);
+                System.out.println("변경한 후의 tempNumber의 값: " + tempNumber);
             }
         }
+    }
 
     public void equalClicked(View v) {
         if (intBoll) {
@@ -141,7 +112,7 @@ public class Calculator extends AppCompatActivity {
             }
             int operationCount = 0;
             for (int i = 0; i < countString; i++) {
-                System.out.println("operation[i]:"+operation[i]);
+                //System.out.println("operation[i]:"+operation[i]);
                 if (operation[i].equals("*") || operation[i].equals("/")) {
                     calculationOrder[operationCount] = i;
                     operationCount++;
@@ -154,20 +125,15 @@ public class Calculator extends AppCompatActivity {
                 }
             }
             //System.out.println("현재 operationCount의 값: operationCount: "+operationCount);
-            if (intBoll) {
-                number[countInt] = tempNumber;
-                tempNumber = "0";
-                countInt++;
-                intBoll = false;
-                isPointClick = false;
-            }
+            number[countInt] = tempNumber;
+            tempNumber = "";
             float tempStorageVar = 0;
             float tempVar1;
             float tempVar2;
             for (int i = 0; i < operationCount; i++) {
                 int priorityOperation = calculationOrder[i];
-                System.out.println("priotityOperation: "+priorityOperation);
-                System.out.println("operation[priorityOperation]: "+operation[priorityOperation]);
+                //System.out.println("priotityOperation: "+priorityOperation);
+                //System.out.println("operation[priorityOperation]: "+operation[priorityOperation]);
                 switch (operation[priorityOperation]) {
                     case "/":
                         tempStorageVar = Float.parseFloat(number[priorityOperation]) / Float.parseFloat(number[priorityOperation+1]);
@@ -191,7 +157,7 @@ public class Calculator extends AppCompatActivity {
                         tempStorageVar = tempVar1 + tempVar2;
                         break;
                 }
-                System.out.println("tempStorageVar: "+tempStorageVar);
+                //System.out.println("tempStorageVar: "+tempStorageVar);
                 if(usedValueArray[priorityOperation] || usedValueArray[priorityOperation]){
                     usedValueArray[priorityOperation] = true;
                     usedValueArray[priorityOperation + 1] = true;
@@ -229,7 +195,7 @@ public class Calculator extends AppCompatActivity {
                 number[0] = "" + result;
                 isPointClick = true;
             }
-            System.out.println("현재 배열의 첫번째 값으로 쓰이는 number[0]:" + number[0]);
+            //System.out.println("현재 배열의 첫번째 값으로 쓰이는 number[0]:" + number[0]);
             tempNumber = "" + result;
             tempOperation = "";
             countInt = 0;
@@ -240,7 +206,6 @@ public class Calculator extends AppCompatActivity {
             isCombination = false;
         }
     }
-
     public void pointClicked(View v){
         String value = sendingText.getText().toString();
         if(intBoll) {
@@ -314,43 +279,39 @@ public class Calculator extends AppCompatActivity {
         String value = sendingText.getText().toString();
         String idCode = "";
         //System.out.println("breaker:"+breaker);
-        if (!intBoll && !stringBoll || tempOperation.equals("") || !breaker) {
-            switch (v.getId()) {
-                case R.id.division:
-                    idCode = "/";
-                    break;
-                case R.id.multiply:
-                    idCode = "*";
-                    break;
-                case R.id.subtract:
-                    idCode = "-";
-                    break;
-                case R.id.addition:
-                    idCode = "+";
-                    break;
-                default:
-                    break;
-            }
-            tempOperation = idCode;
-            if (stringBoll) {
-                int valueLength = value.length();
-                value = value.substring(0, valueLength - 1);
-                value += "" + idCode;
-            } else {
-                value += "" + idCode;
-            }
-            if (intBoll) {
-                number[countInt] = tempNumber;
-                //System.out.println("tempNumber의 값:"+tempNumber);
-                //System.out.println("number[countInt]의 값:"+number[countInt]+"countInt의 값:"+countInt);
-                tempNumber = "";
-                countInt++;
-                intBoll = false;
-                //breaker = true;
-                isPointClick = false;
-            }
-            stringBoll = true;
-            sendingText.setText(value);
+        switch (v.getId()) {
+            case R.id.division:
+                idCode = "/";
+                break;
+            case R.id.multiply:
+                idCode = "*";
+                break;
+            case R.id.subtract:
+                idCode = "-";
+                break;
+            case R.id.addition:
+                idCode = "+";
+                break;
         }
+        tempOperation = idCode;
+        if (stringBoll) {
+            int valueLength = value.length();
+            value = value.substring(0, valueLength - 1);
+            value += "" + idCode;
+        } else {
+            value += "" + idCode;
+        }
+        if (intBoll) {
+            number[countInt] = tempNumber;
+            //System.out.println("tempNumber의 값:"+tempNumber);
+            //System.out.println("number[countInt]의 값:"+number[countInt]+"countInt의 값:"+countInt);
+            tempNumber = "";
+            countInt++;
+            intBoll = false;
+            //breaker = true;
+            isPointClick = false;
+        }
+        stringBoll = true;
+        sendingText.setText(value);
     }
 }
