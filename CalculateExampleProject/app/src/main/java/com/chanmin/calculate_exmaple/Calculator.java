@@ -24,6 +24,8 @@ public class Calculator extends AppCompatActivity {
     boolean breaker;
     boolean isPointClick;
     int oneLimit;
+    boolean [] usedValueArray;
+    boolean isCombination;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,12 +42,14 @@ public class Calculator extends AppCompatActivity {
         breaker = false;
         isPointClick = false;
         oneLimit = 1;
+        usedValueArray = new boolean[100];
     }
 
     public void clearClicked(View v) {
         for(int i =0; i<100; i++){
             number[i]="0";
             operation[i] = "";
+            usedValueArray[i] = false;
         }
         tempNumber = "0";
         tempOperation = "";
@@ -65,18 +69,18 @@ public class Calculator extends AppCompatActivity {
         valueLength = value.length();
         String character = value.substring(valueLength - 1 , valueLength);
         sendingText.setText(value);
-        System.out.println("tempNumber: "+tempNumber);
+        //System.out.println("tempNumber: "+tempNumber);
        if (intBoll) {
             if (Float.parseFloat(tempNumber) > 10) {
                 int tempNumberLength = tempNumber.length();
-                System.out.println("수정하기 전의 tempNumber의 값: "+tempNumber);
+                //System.out.println("수정하기 전의 tempNumber의 값: "+tempNumber);
                 tempNumber = tempNumber.substring(0, tempNumberLength - 1);
-                System.out.println("수정한 후의 tempNumber의 값: "+tempNumber);
+                //System.out.println("수정한 후의 tempNumber의 값: "+tempNumber);
             } else {
                 if(!character.equals(".") && oneLimit == 1){
                     tempNumber = "0";
                     number[countInt] = "0";
-                    System.out.println("tempNumber의 값이 10보다 작고, character의 값이 .이 아님");
+                    //System.out.println("tempNumber의 값이 10보다 작고, character의 값이 .이 아님");
                 }else{
                     int tempLength = tempNumber.length();
                     tempNumber = tempNumber.substring(0 , tempLength-1);
@@ -126,95 +130,115 @@ public class Calculator extends AppCompatActivity {
             }
         }
 
-    public void equalClicked(View v){
-        String value = sendingText.getText().toString();
-        float result = 0;
-        int count = 0;
-        int calculationOrder[] = new int[100];
-        for(int i = 0; i<100; i++){
-            calculationOrder[i] = 0;
-        }
-        int operationCount = 0;
-        int operationLength = operation.length;
-        for(int i=0; i<operationLength; i++){
-            if(operation[i] == "*" || operation[i] == "/"){
-                calculationOrder[count] = i;
-                operationCount++;
+    public void equalClicked(View v) {
+        if (intBoll) {
+            String value = sendingText.getText().toString();
+            float result = 0;
+            int count = 0;
+            int calculationOrder[] = new int[100];
+            for (int i = 0; i < 100; i++) {
+                calculationOrder[i] = 0;
             }
-        }
-        for(int i=0; i<operationLength; i++){
-            if(operation[i] == "-" || operation[i] == "+"){
-                calculationOrder[count] = i;
-                operationCount++;
+            int operationCount = 0;
+            for (int i = 0; i < countString; i++) {
+                System.out.println("operation[i]:"+operation[i]);
+                if (operation[i].equals("*") || operation[i].equals("/")) {
+                    calculationOrder[operationCount] = i;
+                    operationCount++;
+                }
             }
-        }
-        if(intBoll) {
-            number[countInt] = tempNumber;
-            tempNumber = "0";
-            countInt++;
-            intBoll = false;
-            isPointClick = false;
-        }
-        for(int i=0; i<100; i+=2) {
-            System.out.println("i의 값: "+i+" number[i]의 값 : "+number[i]+" number[i+1]의 값: "+number[i+1]);
-            if (number[i + 1] != null) {
-                System.out.println("operation[count]:" + operation[count] + " count:" + count);
-                switch (operation[count]) {
+            for (int i = 0; i < countString; i++) {
+                if (operation[i].equals("-") || operation[i].equals("+")) {
+                    calculationOrder[operationCount] = i;
+                    operationCount++;
+                }
+            }
+            //System.out.println("현재 operationCount의 값: operationCount: "+operationCount);
+            if (intBoll) {
+                number[countInt] = tempNumber;
+                tempNumber = "0";
+                countInt++;
+                intBoll = false;
+                isPointClick = false;
+            }
+            float tempStorageVar = 0;
+            float tempVar1;
+            float tempVar2;
+            for (int i = 0; i < operationCount; i++) {
+                int priorityOperation = calculationOrder[i];
+                System.out.println("priotityOperation: "+priorityOperation);
+                System.out.println("operation[priorityOperation]: "+operation[priorityOperation]);
+                switch (operation[priorityOperation]) {
                     case "/":
-                        result += Float.parseFloat(number[i]) / Float.parseFloat(number[i + 1]);
+                        tempStorageVar = Float.parseFloat(number[priorityOperation]) / Float.parseFloat(number[priorityOperation+1]);
                         break;
                     case "*":
-                        result += Float.parseFloat(number[i]) * Float.parseFloat(number[i + 1]);
+                        //System.out.println("값을 집어넣기 전의 tempStorageVar값 : "+tempStorageVar);
+                        //System.out.println("Float.parseFloat(number[priorityOperation]: "+Float.parseFloat(number[priorityOperation]));
+                        //System.out.println("Float.parseFloat(number[priorityOperation+1]: "+Float.parseFloat(number[priorityOperation+1]));
+                        //System.out.println("tempVar1: "+tempVar1+" tempVar2: "+tempVar2);
+                        tempStorageVar = Float.parseFloat(number[priorityOperation]) * Float.parseFloat(number[priorityOperation+1]);
+                        //System.out.println("값을 집어넣은 후의 tempStorageVar값 : "+tempStorageVar);
                         break;
                     case "-":
-                        result += Float.parseFloat(number[i]) - Float.parseFloat(number[i + 1]);
+                        tempVar1 = Float.parseFloat(number[priorityOperation]);
+                        tempVar2 = Float.parseFloat(number[priorityOperation+1]);
+                        tempStorageVar = tempVar1 - tempVar2;
                         break;
                     case "+":
-                        //System.out.println("number[i]:" + number[i] + " number[i+1]:" + number[i + 1]);
-                        result += Float.parseFloat(number[i]) + Float.parseFloat(number[i + 1]);
+                        tempVar1 = Float.parseFloat(number[priorityOperation]);
+                        tempVar2 = Float.parseFloat(number[priorityOperation+1]);
+                        tempStorageVar = tempVar1 + tempVar2;
                         break;
                 }
-                count++;
-            } else if (number[i] != null) {
-                switch (operation[count]) {
-                    case "/":
-                        result = result / Float.parseFloat(number[i]);
-                        break;
-                    case "*":
-                        result = result * Float.parseFloat(number[i]);
-                        break;
-                    case "-":
-                        result -= Float.parseFloat(number[i]);
-                        break;
-                    case "+":
-                        result += Float.parseFloat(number[i]);
-                        break;
+                System.out.println("tempStorageVar: "+tempStorageVar);
+                if(usedValueArray[priorityOperation] || usedValueArray[priorityOperation]){
+                    usedValueArray[priorityOperation] = true;
+                    usedValueArray[priorityOperation + 1] = true;
+                    for(int j = 0; j < countInt; j++){
+                        if(usedValueArray[j]){
+                            number[j] = "" + tempStorageVar;
+                        }
+                    }
+                } else {
+                    usedValueArray[priorityOperation] = true;
+                    usedValueArray[priorityOperation + 1] = true;
+                    number[priorityOperation] = "" + tempStorageVar;
+                    number[priorityOperation + 1] = "" + tempStorageVar;
                 }
+            }
+            result = Float.parseFloat(number[0]);
+            int resultInt = (int) result;
+            float mockery = result - (float) resultInt;
+            if (mockery == 0) {
+                value = "" + resultInt;
+                //System.out.println("result버튼 입력확인. int형 값이 result변수에 삽입됨. result: " + resultInt);
             } else {
-                break;
+                //System.out.println("result버튼 입력확인. float형 값이 result변수에 삽입됨. result: " + result);
+                value = "" + result;
             }
+            sendingText.setText(value);
+            for (int i = 0; i < 100; i++) {
+                number[i] = "0";
+                operation[i] = "";
+                usedValueArray[i] = false;
+            }
+            if (mockery == 0) {
+                number[0] = "" + resultInt;
+            } else {
+                number[0] = "" + result;
+                isPointClick = true;
+            }
+            System.out.println("현재 배열의 첫번째 값으로 쓰이는 number[0]:" + number[0]);
+            tempNumber = "" + result;
+            tempOperation = "";
+            countInt = 0;
+            countString = 0;
+            intBoll = true;
+            stringBoll = false;
+            breaker = false;
+            isCombination = false;
         }
-        int resultInt = (int)result;
-        float mockery = result - (float)resultInt;
-        if(mockery == 0){
-            value = ""+resultInt;
-        }else {
-            value = "" + result;
-        }
-        sendingText.setText(value);
-
-        for(int i =0; i<100; i++){
-            number[i]="0";
-            operation[i] = "";
-        }
-        number[0] = ""+result;
-        tempNumber = ""+result;
-        tempOperation = "";
-        countInt = 0;
-        countString = 0;
-        intBoll = true;
-        stringBoll = false;
-        breaker = false;
     }
 
     public void pointClicked(View v){
@@ -222,7 +246,17 @@ public class Calculator extends AppCompatActivity {
         if(intBoll) {
             if(!isPointClick) {
                 value += ".";
-                tempNumber += ".";
+                int tempNumberLength = tempNumber.length();
+                if(tempNumberLength > 2) {
+                    String floatOrInt = tempNumber.substring(tempNumberLength - 2, tempNumberLength);
+                    if(floatOrInt.equals(".0")){
+                        tempNumber = tempNumber.substring(0 , tempNumberLength - 1);
+                    }else{
+                        tempNumber += ".";
+                    }
+                } else {
+                    tempNumber += ".";
+                }
                 sendingText.setText(value);
                 isPointClick = true;
             }
@@ -279,8 +313,8 @@ public class Calculator extends AppCompatActivity {
     public void arbitraryOperatorsClicked(View v) {
         String value = sendingText.getText().toString();
         String idCode = "";
-        System.out.println("breaker:"+breaker);
-        if (!intBoll && !stringBoll || tempOperation != "" || !breaker) {
+        //System.out.println("breaker:"+breaker);
+        if (!intBoll && !stringBoll || tempOperation.equals("") || !breaker) {
             switch (v.getId()) {
                 case R.id.division:
                     idCode = "/";
@@ -312,7 +346,7 @@ public class Calculator extends AppCompatActivity {
                 tempNumber = "";
                 countInt++;
                 intBoll = false;
-                breaker = true;
+                //breaker = true;
                 isPointClick = false;
             }
             stringBoll = true;
