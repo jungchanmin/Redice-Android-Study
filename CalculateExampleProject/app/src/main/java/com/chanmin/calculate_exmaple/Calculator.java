@@ -6,6 +6,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 
 public class Calculator extends AppCompatActivity {
@@ -13,7 +14,7 @@ public class Calculator extends AppCompatActivity {
     //****************************************
     //--backOperator--
     List<String> backOperator;
-    List<String> operationStack;
+    Stack<String> operationStack;
     List<String> alignedOperator;
     boolean isNumberPadClick;
     //************************
@@ -25,8 +26,7 @@ public class Calculator extends AppCompatActivity {
         sendingText =(TextView)findViewById(R.id.textView);
         //********************************************
         backOperator = new ArrayList<>();
-        isNumberPadClick = false;
-        operationStack = new ArrayList<>();
+        operationStack = new Stack<>();
         alignedOperator = new ArrayList<>();
         //*********************************************
     }
@@ -45,36 +45,51 @@ public class Calculator extends AppCompatActivity {
     }
 
     public void equalClicked(View v) {
-        String value = sendingText.getText().toString();
         if(isNumberPadClick){
             String tempNumber = "";
-            for(int i =0; i<backOperator.size(); i++){
-                if(backOperator.get(i).equals("/") || backOperator.get(i).equals("*")){
-                    operationStack.add(backOperator.get(i));
+            for(String operator : backOperator){
+                if(operator.equals("/") || operator.equals("*")){
+                    operationStack.push(operator);
                     alignedOperator.add(tempNumber);
                     tempNumber = "";
-                } else if(backOperator.get(i).equals("+") || backOperator.get(i).equals("-")){
-                    operationStack.add(backOperator.get(i));
+                } else if(operator.equals("+") || operator.equals("-")){
+                    System.out.println("+ or - operator detected");
                     alignedOperator.add(tempNumber);
                     tempNumber = "";
-                    for(int j = operationStack.size()-1; j >= 0; j--){
-                        if(operationStack.get(j).equals("*") || operationStack.get(j).equals("/")){
-                            alignedOperator.add(operationStack.get(j));
-                            operationStack.remove(j);
+                    String multiplyCheck;
+                    for(;;){
+                        if(operationStack.empty()){
+                            break;
+                        }
+                        multiplyCheck = operationStack.pop();
+                        System.out.println("multiplyCheck:"+multiplyCheck);
+                        if(multiplyCheck.equals("*") || multiplyCheck.equals("/")){
+                            alignedOperator.add(multiplyCheck);
+                        }else{
+                            operationStack.push(multiplyCheck);
+                            break;
                         }
                     }
+                    operationStack.push(operator);
                 } else {
-                    tempNumber += backOperator.get(i);
+                    tempNumber += operator;
                 }
             }
             alignedOperator.add(tempNumber);
-            for(int i = operationStack.size() - 1; i>=0; i--){
-                alignedOperator.add(operationStack.get(i));
+            int count = 0;
+            String stack;
+            for(;;){
+                System.out.println("연산자 스택에서 뺴내기. count : " + count);
+                count++;
+                if(operationStack.empty()){
+                    break;
+                }
+                stack = operationStack.pop();
+                alignedOperator.add(stack);
             }
-            System.out.println("");
-            value = "";
-            for(int i = 0; i<alignedOperator.size(); i++){
-                value += alignedOperator.get(i)+" ";
+            String value  = "";
+            for(String result : alignedOperator){
+                value += result;
             }
             sendingText.setText(value);
         }
