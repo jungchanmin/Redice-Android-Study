@@ -113,10 +113,27 @@ public class Calculator extends AppCompatActivity {
             String stringNumber2 = "";
             int firstNumberPoint = 0;
             float tempResult = 0;
+            boolean operationType1 = false;
+            boolean operationType2 = false;
+            int count = 0;
+            while(alignedOperator.size() > count){
+                if(alignedOperator.get(count).equals("*") || alignedOperator.get(count).equals("/")){
+                    operationType1 = true;
+                }else if(alignedOperator.get(count).equals("-") || alignedOperator.get(count).equals("+")){
+                    operationType2 = true;
+                }
+                count++;
+            }
             int alignedOperatorSize = alignedOperator.size();
-            for (int i = 0; i < alignedOperatorSize; i++) {
+            int i = 0;
+            while(i < alignedOperatorSize) {
                 tempValue = alignedOperator.get(i);
                 if (tempValue.equals("*") || tempValue.equals("/") || tempValue.equals("-") || tempValue.equals("+")) {
+                    if(stringNumber1.equals("")){
+                        stringNumber1 = alignedOperator.get(i-2);
+                        stringNumber2 = alignedOperator.get(i-1);
+                        firstNumberPoint = i-2;
+                    }
                     switch (tempValue) {
                         case "*":
                             tempResult = Float.parseFloat(stringNumber1) * Float.parseFloat(stringNumber2);
@@ -145,13 +162,16 @@ public class Calculator extends AppCompatActivity {
                         break;
                     }
                 } else {
-                    if (stringNumber1.equals("")) {
-                        stringNumber1 = alignedOperator.get(i);
-                        firstNumberPoint = i;
-                    } else if (stringNumber2.equals("")) {
-                        stringNumber2 = alignedOperator.get(i);
+                    if (!operationType1 || !operationType2) {
+                        if (stringNumber1.equals("")) {
+                            stringNumber1 = alignedOperator.get(i);
+                            firstNumberPoint = i;
+                        } else if (stringNumber2.equals("")) {
+                            stringNumber2 = alignedOperator.get(i);
+                        }
                     }
                 }
+                i++;
             }
                 String result = alignedOperator.get(0);
                 int resultLength = result.length();
