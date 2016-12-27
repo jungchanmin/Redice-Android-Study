@@ -1,4 +1,5 @@
 package com.chanmin.calculate_exmaple;
+import android.os.Debug;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -36,12 +37,43 @@ public class Calculator extends AppCompatActivity {
         backOperator.clear();
         operationStack.clear();
         alignedOperator.clear();
-        String value;
-        value = "";
-        sendingText.setText(value);
+        sendingText.setText("");
     }
 
     public void deleteClicked(View v) {
+        String value = sendingText.getText().toString();
+        int valueLength = value.length();
+        if (valueLength > 1) {
+            value = value.substring(0, valueLength - 1);
+        } else {
+            value = "";
+        }
+
+        sendingText.setText(value);
+
+        if(backOperator.size() > 1) {
+            int backOperatorSize = backOperator.size() - 1;
+            if (backOperator.get(backOperatorSize).equals(".")) {
+                isPointClick = false;
+                isNumberPadClick = true;
+            }
+            backOperator.remove(backOperatorSize);
+            if (!isNumberPadClick) {
+                isNumberPadClick = true;
+            } else {
+                backOperatorSize = backOperator.size() - 1;
+                switch (backOperator.get(backOperatorSize)) {
+                    case "*":
+                    case "/":
+                    case "-":
+                    case "+":
+                        isNumberPadClick = false;
+                        break;
+                }
+            }
+        }else{
+            backOperator.clear();
+        }
     }
 
     public void equalClicked(View v) {
@@ -53,13 +85,11 @@ public class Calculator extends AppCompatActivity {
                     alignedOperator.add(tempNumber);
                     tempNumber = "";
                 } else if (operator.equals("+") || operator.equals("-")) {
-                    //System.out.println("+ or - operator detected");
                     alignedOperator.add(tempNumber);
                     tempNumber = "";
                     String multiplyCheck;
                     while (!operationStack.empty()) {
                         multiplyCheck = operationStack.pop();
-                        //System.out.println("multiplyCheck:"+multiplyCheck);
                         if (multiplyCheck.equals("*") || multiplyCheck.equals("/")) {
                             alignedOperator.add(multiplyCheck);
                         } else {
@@ -73,22 +103,11 @@ public class Calculator extends AppCompatActivity {
                 }
             }
             alignedOperator.add(tempNumber);
-            //int count = 0;
             String stack;
-            for (; ; ) {
-                //System.out.println("연산자 스택에서 뺴내기. count : " + count);
-                //count++;
-                if (operationStack.empty()) {
-                    break;
-                }
+            while (!operationStack.isEmpty()) {
                 stack = operationStack.pop();
                 alignedOperator.add(stack);
             }
-            /*String value  = "";
-            for(String result : alignedOperator){
-                value += result;
-            }
-            sendingText.setText(value);*/
             String tempValue;
             String stringNumber1 = "";
             String stringNumber2 = "";
@@ -96,10 +115,8 @@ public class Calculator extends AppCompatActivity {
             float tempResult = 0;
             int alignedOperatorSize = alignedOperator.size();
             for (int i = 0; i < alignedOperatorSize; i++) {
-                System.out.println("i:" + i);
                 tempValue = alignedOperator.get(i);
                 if (tempValue.equals("*") || tempValue.equals("/") || tempValue.equals("-") || tempValue.equals("+")) {
-                    System.out.println("stringNumber1: " + stringNumber1 + " stringNumber2: " + stringNumber2);
                     switch (tempValue) {
                         case "*":
                             tempResult = Float.parseFloat(stringNumber1) * Float.parseFloat(stringNumber2);
@@ -114,7 +131,6 @@ public class Calculator extends AppCompatActivity {
                             tempResult = Float.parseFloat(stringNumber1) + Float.parseFloat(stringNumber2);
                             break;
                     }
-                    System.out.println(stringNumber1 + alignedOperator.get(i) + stringNumber2);
                     alignedOperator.remove(i);
                     alignedOperator.remove(stringNumber1);
                     stringNumber1 = "";
@@ -122,7 +138,6 @@ public class Calculator extends AppCompatActivity {
                     stringNumber2 = "";
                     alignedOperator.add(firstNumberPoint, "" + tempResult);
                     firstNumberPoint = 0;
-                    System.out.println("=" + tempResult);
                     if (alignedOperatorSize > 2) {
                         alignedOperatorSize -= 2;
                         i = -1;
