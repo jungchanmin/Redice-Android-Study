@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_to_do_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding = "10dp"
+    android:orientation="vertical">
+    <TextView
+        android:id = "@+id/fixedTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="To Do List"
+        android:textSize = "30sp"
+        android:gravity = "center"
+        android:textColor = "#ffffff"
+        android:background = "#66000000"/>
+
+    <EditText
+        android:id = "@+id/titleText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:textSize = "25sp"
+        android:background = "#893daa77"
+        android:hint="Title..." />
+
+    <EditText
+
+        android:id="@+id/mainText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textMultiLine"
+        android:ems="10"
+        android:layout_weight = "1"
+        android:background = "#893daadd"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.1">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text = "Important!!!"
+            android:layout_gravity = "center"
+            android:gravity = "center"
+            android:textSize = "30sp"/>
+        <CheckBox
+            android:layout_marginLeft = "20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity = "center"
+        android:gravity = "center">
+
+        <Button
+            android:id = "@+id/apply"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick = "applyButtonClicked"
+            android:text="apply"
+            android:textSize = "18sp"
+            android:textColor = "#ffffffff"
+            android:backgroundTint="#ff000000"
+            android:background="@android:drawable/btn_default">
+        </Button>
+        <Button
+        android:id = "@+id/cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick = "cancelButtonClicked"
+        android:text="cancel"
+        android:textSize = "18sp"
+        android:textColor = "#ffffffff"
+        android:backgroundTint="#ff000000"
+        android:background="@android:drawable/btn_default">
+    </Button>
+
+    </LinearLayout>
+
+</LinearLayout>
