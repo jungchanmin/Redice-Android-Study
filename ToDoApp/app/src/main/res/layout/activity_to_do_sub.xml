@@ -4,82 +4,90 @@
     android:id="@+id/activity_to_do_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding = "10dp"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="10dp">
+
     <TextView
-        android:id = "@+id/fixedTitle"
+        android:id="@+id/fixedTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="#66000000"
+        android:gravity="center"
         android:text="To Do List"
-        android:textSize = "30sp"
-        android:gravity = "center"
-        android:textColor = "#ffffff"
-        android:background = "#66000000"/>
+        android:textColor="#ffffff"
+        android:textSize="30sp" />
 
     <EditText
-        android:id = "@+id/titleText"
+        android:id="@+id/titleText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="textPersonName"
+        android:background="#893daa77"
         android:ems="10"
-        android:textSize = "25sp"
-        android:background = "#893daa77"
-        android:hint="Title..." />
+        android:hint="Title..."
+        android:inputType="textPersonName"
+        android:text=""
+        android:textSize="25sp" />
 
     <EditText
 
         android:id="@+id/mainText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="textMultiLine"
+        android:layout_weight="1"
+        android:background="#893daadd"
         android:ems="10"
-        android:layout_weight = "1"
-        android:background = "#893daadd"/>
+        android:inputType="textMultiLine" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="0.1">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text = "Important!!!"
-            android:layout_gravity = "center"
-            android:gravity = "center"
-            android:textSize = "30sp"/>
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="Important!!!"
+            android:textSize="30sp" />
+
         <CheckBox
-            android:layout_marginLeft = "20dp"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:layout_marginLeft="20dp" />
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity = "center"
-        android:gravity = "center">
+        android:layout_gravity="center"
+        android:gravity="center">
 
         <Button
-            android:id = "@+id/apply"
+            android:id="@+id/apply"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick = "applyButtonClicked"
-            android:text="apply"
-            android:textSize = "18sp"
-            android:textColor = "#ffffffff"
+            android:background="@android:drawable/btn_default"
             android:backgroundTint="#ff000000"
-            android:background="@android:drawable/btn_default">
+            android:onClick="applyButtonClicked"
+            android:text="apply"
+            android:textColor="#ffffffff"
+            android:textSize="18sp">
+
         </Button>
+
         <Button
-        android:id = "@+id/cancel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick = "cancelButtonClicked"
-        android:text="cancel"
-        android:textSize = "18sp"
-        android:textColor = "#ffffffff"
-        android:backgroundTint="#ff000000"
-        android:background="@android:drawable/btn_default">
-    </Button>
+            android:id="@+id/cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:drawable/btn_default"
+            android:backgroundTint="#ff000000"
+            android:onClick="cancelButtonClicked"
+            android:text="cancel"
+            android:textColor="#ffffffff"
+            android:textSize="18sp">
+
+        </Button>
 
     </LinearLayout>
 

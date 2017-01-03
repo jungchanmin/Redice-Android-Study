@@ -4,35 +4,39 @@
     android:id="@+id/activity_to_do_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding = "10dp"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="10dp">
+
     <TextView
-        android:id = "@+id/fixedTitle"
+        android:id="@+id/fixedTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="#66000000"
+        android:gravity="center"
         android:text="To Do List"
-        android:textSize = "30sp"
-        android:gravity = "center"
-        android:textColor = "#ffffff"
-        android:background = "#66000000"/>
+        android:textColor="#ffffff"
+        android:textSize="30sp" />
+
     <ListView
-        android:id = "@+id/listView"
+        android:id="@+id/listView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight = "1">
+        android:layout_weight="1">
 
     </ListView>
+
     <Button
-        android:id = "@+id/addNewList"
+        android:id="@+id/addNewList"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick = "addNewListButtonClicked"
-        android:text="+ Add new List"
-        android:textSize = "18sp"
-        android:textColor = "#ffffffff"
-        android:layout_gravity = "center"
+        android:layout_gravity="center"
+        android:background="@android:drawable/btn_default"
         android:backgroundTint="#ff000000"
-        android:background="@android:drawable/btn_default">
+        android:onClick="addNewListButtonClicked"
+        android:text="+ Add new List"
+        android:textColor="#ffffffff"
+        android:textSize="18sp">
+
     </Button>
 
 </LinearLayout>
