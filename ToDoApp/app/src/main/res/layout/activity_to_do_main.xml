@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_to_do_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -25,18 +24,43 @@
 
     </ListView>
 
-    <Button
-        android:id="@+id/addNewList"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:background="@android:drawable/btn_default"
-        android:backgroundTint="#ff000000"
-        android:onClick="addNewListButtonClicked"
-        android:text="+ Add new List"
-        android:textColor="#ffffffff"
-        android:textSize="18sp">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    </Button>
+        <Button
+            android:id="@+id/addNewList"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:background="@android:drawable/btn_default"
+            android:backgroundTint="#ff000000"
+            android:onClick="addNewListButtonClicked"
+            android:text="+ Add new List"
+            android:textColor="#ffffffff"
+            android:textSize="18sp">
+
+        </Button>
+
+        <Button
+            android:id="@+id/delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginEnd="12dp"
+            android:layout_marginRight="12dp"
+            android:background="@android:drawable/btn_default"
+            android:backgroundTint="#ff000000"
+            android:onClick="deleteButtonClicked"
+            android:text="delete"
+            android:textColor="#ffffffff"
+            android:textSize="18sp">
+
+        </Button>
+    </RelativeLayout>
+
 
 </LinearLayout>
