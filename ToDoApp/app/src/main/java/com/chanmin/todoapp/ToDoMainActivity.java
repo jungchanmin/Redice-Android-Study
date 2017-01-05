@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.View;
 import android.widget.AdapterView;
@@ -61,7 +62,6 @@ public class ToDoMainActivity extends AppCompatActivity {
     }
 
     public void deleteButtonClicked(View v) {
-        System.out.println("list.getCheckedItemPosition() : " + list.getCheckedItemPosition());
         SparseBooleanArray isCheck = list.getCheckedItemPositions();
         int count = titleAdapter.getCount();
         for (int i = count - 1; i >= 0; i--) {
@@ -79,6 +79,7 @@ public class ToDoMainActivity extends AppCompatActivity {
             Intent intent = new Intent(ToDoMainActivity.this, ToDoSubActivity.class);
             intent.putExtra("clickedTitle", clickedTitle);
             intent.putExtra("isReviseOrView", true);
+            intent.putExtra("position",position);
             startActivityForResult(intent, MAIN2);
         }
     };
@@ -110,7 +111,6 @@ public class ToDoMainActivity extends AppCompatActivity {
                 if (resultCode == Activity.RESULT_OK) {
                     if (data.getBooleanExtra("isImportant", false)) {
                         titleList.add(0, data.getStringExtra(MAINKEY));
-                        list.clearChoices();
                     } else {
                         titleList.add(data.getStringExtra(MAINKEY));
                     }
@@ -125,7 +125,8 @@ public class ToDoMainActivity extends AppCompatActivity {
                     titleList.remove(data.getStringExtra("originalTitle"));
                     if (data.getBooleanExtra("isImportant", false)) {
                         titleList.add(0, data.getStringExtra(MAINKEY));
-                        list.clearChoices();
+                        list.setItemChecked(data.getIntExtra("position",0),false);
+                        list.setItemChecked(0,true);
                     } else {
                         titleList.add(position, data.getStringExtra(MAINKEY));
                     }

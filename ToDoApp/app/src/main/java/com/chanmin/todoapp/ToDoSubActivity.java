@@ -81,11 +81,13 @@ public class ToDoSubActivity extends AppCompatActivity {
 
     public void applyButtonClicked(View v) {
         String value = title.getText().toString();
+        int valueLength = value.length();
+        String importantValue = value.substring(valueLength - 1, valueLength);
         if (important) {
-            value += "*";
+            if(!importantValue.equals("*")){
+                value += "*";
+            }
         } else {
-            int valueLength = value.length();
-            String importantValue = value.substring(valueLength - 1, valueLength);
             if (importantValue.equals("*")) {
                 value = value.substring(0, valueLength - 1);
             }
@@ -100,6 +102,7 @@ public class ToDoSubActivity extends AppCompatActivity {
         intent.putExtra("" + MAINKEY, value);
         intent.putExtra("originalTitle", originalTitle);
         intent.putExtra("isImportant", important);
+        intent.putExtra("position",intent.getIntExtra("position",0));
         setResult(Activity.RESULT_OK, intent);
         finish();
     }
