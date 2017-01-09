@@ -20,49 +20,32 @@ import org.w3c.dom.Text;
 import java.util.ArrayList;
 import java.util.prefs.Preferences;
 
-import static com.chanmin.todoapp.ToDoMainActivity.MAINKEY;
 
 public class ToDoSubActivity extends AppCompatActivity {
-    Button apply;
-    Button cancel;
+    String titleText;
+    String mainText;
     EditText title;
     EditText main;
-    TextView fixedTitle;
-    String value;
-    Boolean isReviseOrView;
-    Boolean important;
-    String originalTitle;
-    CheckBox importantChecking;
+    Button cancel;
+    Button apply;
+    boolean isCancelClicked;
+    int position;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_to_do_sub);
-        fixedTitle = (TextView) findViewById(R.id.fixedTitle);
-        apply = (Button) findViewById(R.id.apply);
-        cancel = (Button) findViewById(R.id.cancel);
-        title = (EditText) findViewById(R.id.titleText);
-        main = (EditText) findViewById(R.id.mainText);
-        importantChecking = (CheckBox) findViewById(R.id.importantCheckbox);
+        title = (EditText)findViewById(R.id.titleText);
+        main = (EditText)findViewById(R.id.mainText);
+        cancel = (Button)findViewById(R.id.cancel);
+        apply = (Button)findViewById(R.id.apply);
         Intent intent = getIntent();
-        isReviseOrView = intent.getBooleanExtra("isReviseOrView", false);
-        originalTitle = intent.getStringExtra("clickedTitle");
-        important = false;
-        System.out.println("originalTitle:" + originalTitle);
-        if (isReviseOrView) {
-            value = "View List";
-            title.setText(intent.getStringExtra("clickedTitle"));
-            apply.setText("complete");
-            String titleText = title.getText().toString();
-            Log.i("testingString", titleText);
-            SharedPreferences mainText = getPreferences(0);
-            main.setText(mainText.getString(titleText, "error"));
-            important = mainText.getBoolean(titleText + "important", false);
-            importantChecking.setChecked(important);
-        } else {
-            value = "Add List";
-        }
-        fixedTitle.setText(value);
+        titleText = intent.getStringExtra("titleText");
+        position = intent.getIntExtra("position", 0);
+        title.setText(titleText);
+        SharedPreferences pref  = getPreferences(0);
+        mainText = pref.getString(titleText,"");
+        main.setText(mainText);
     }
 
     public void cancelButtonClicked(View v) {
@@ -71,39 +54,19 @@ public class ToDoSubActivity extends AppCompatActivity {
     }
 
     public void checking(View v) {
-        Boolean checkingValue = importantChecking.isChecked();
-        if (checkingValue) {
-            important = true;
-        } else {
-            important = false;
-        }
     }
 
     public void applyButtonClicked(View v) {
-        String value = title.getText().toString();
-        int valueLength = value.length();
-        String importantValue = value.substring(valueLength - 1, valueLength);
-        if (important) {
-            if(!importantValue.equals("*")){
-                value += "*";
-            }
-        } else {
-            if (importantValue.equals("*")) {
-                value = value.substring(0, valueLength - 1);
-            }
-        }
-        String mainTextValue = main.getText().toString();
-        SharedPreferences mainText = getPreferences(0);
-        SharedPreferences.Editor edit = mainText.edit();
-        edit.putString(value, mainTextValue);
-        edit.putBoolean(value + "important", important);
+        String titleT = title.getText().toString();
+        String mainT = main.getText().toString();
+        SharedPreferences pref = getPreferences(0);
+        SharedPreferences.Editor edit = pref.edit();
+        edit.putString(titleT, mainT);
         edit.commit();
         Intent intent = new Intent();
-        intent.putExtra("" + MAINKEY, value);
-        intent.putExtra("originalTitle", originalTitle);
-        intent.putExtra("isImportant", important);
-        intent.putExtra("position",intent.getIntExtra("position",0));
-        setResult(Activity.RESULT_OK, intent);
+        intent.putExtra("titleText",titleT);
+        intent.putExtra("position", position);
+        setResult(Activity.RESULT_OK,intent);
         finish();
     }
 }

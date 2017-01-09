@@ -1,139 +1,146 @@
 package com.chanmin.todoapp;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.SparseBooleanArray;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CheckedTextView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
+import java.util.zip.Inflater;
 
 public class ToDoMainActivity extends AppCompatActivity {
-    ArrayList<String> titleList;
-    ArrayList<Boolean> clickList;
-    ArrayAdapter<String> titleAdapter;
+    ArrayList<Item> listItem;
+    Boolean deleteItem[];
+    ListAdapter adapter;
+    CheckBox check;
     ListView list;
-    Button addNewListButton;
-    Button deleteButton;
-    boolean isAddListCalledByUser;
-    final int MAIN = 0;
-    final int MAIN2 = 1;
-    final static String MAINKEY = "titleList";
+    final int ADDLIST = 0;
+    final int CHANGELIST = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_to_do_main);
-        addNewListButton = (Button) findViewById(R.id.addNewList);
-        deleteButton = (Button) findViewById(R.id.delete);
-        list = (ListView) findViewById(R.id.listView);
-        clickList = new ArrayList<>();
-        titleList = new ArrayList<>();
-        SharedPreferences savedList = getSharedPreferences("toDoListTitle", 0);
-        int count = savedList.getInt("count", 0);
-        for (int i = 0; i < count; i++) {
-            titleList.add(savedList.getString("" + i, "error"));
+        listItem = new ArrayList<>();
+        SharedPreferences pref = getSharedPreferences("titleList", 0);
+        int count = pref.getInt("listItemSize",0);
+        for(int i =0; i<count; i++){
+            listItem.add(new Item(pref.getString(""+i,""),false));
         }
-        titleAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_multiple_choice, titleList);
-        list.setAdapter(titleAdapter);
-        list.setOnItemClickListener(listViewClickListener);
-        list.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-        list.clearChoices();
-        for (int i = 0; i < titleList.size(); i++) {
-            clickList.add(false);
+        adapter = new ListAdapter(this, R.layout.activity_list_view_item, listItem);
+        list = (ListView) findViewById(R.id.listView);
+        list.setAdapter(adapter);
+        deleteItem = new Boolean[listItem.size()];
+        for(int i =0; i<deleteItem.length; i++){
+            deleteItem[i] = false;
         }
     }
 
     public void addNewListButtonClicked(View v) {
-        isAddListCalledByUser = true;
         Intent intent = new Intent(ToDoMainActivity.this, ToDoSubActivity.class);
-        intent.putExtra("isReviseOrView", false);
-        startActivityForResult(intent, MAIN);
+        intent.putExtra("titleText","");
+        startActivityForResult(intent, ADDLIST);
     }
 
     public void deleteButtonClicked(View v) {
-        SparseBooleanArray isCheck = list.getCheckedItemPositions();
-        int count = titleAdapter.getCount();
-        for (int i = count - 1; i >= 0; i--) {
-            if (isCheck.get(i)) {
-                titleList.remove(i);
+        for(int i = adapter.getCount()-1; i >= 0; i--){
+            if(deleteItem[i]){
+                listItem.remove(i);
             }
         }
+        adapter.notifyDataSetChanged();
         list.clearChoices();
-        titleAdapter.notifyDataSetChanged();
     }
 
+    public void checkBoxClicked(View checkView) {
+        boolean isCheck = ((CheckBox) checkView).isChecked();
+        CheckBox check = (CheckBox) checkView;
+        int position = Integer.parseInt(check.getTag().toString());
+        if(isCheck){
+            check.setChecked(true);
+            deleteItem[position] = true;
+        }else {
+            check.setChecked(false);
+            deleteItem[position] = false;
+        }
+    }
+    public void listTitleClicked(View clickedView){
+        int position = Integer.parseInt(clickedView.getTag().toString());
+        String clickedTitleText = ((TextView) clickedView).getText().toString();
+        Intent intent = new Intent(ToDoMainActivity.this, ToDoSubActivity.class);
+        intent.putExtra("titleText", clickedTitleText);
+        intent.putExtra("position", position);
+        startActivityForResult(intent,CHANGELIST);
+    }
+    /*
     AdapterView.OnItemClickListener listViewClickListener = new AdapterView.OnItemClickListener() {
         public void onItemClick(AdapterView<?> parentView, View clickedView, int position, long id) {
-            String clickedTitle = ((TextView) clickedView).getText().toString();
+            String clickedTitleText = ((TextView) clickedView).getText().toString();
             Intent intent = new Intent(ToDoMainActivity.this, ToDoSubActivity.class);
-            intent.putExtra("clickedTitle", clickedTitle);
-            intent.putExtra("isReviseOrView", true);
-            intent.putExtra("position",position);
-            startActivityForResult(intent, MAIN2);
+            intent.putExtra("titleText",clickedTitleText);
+            startActivity(intent);
         }
-    };
+    };*/
 
     public void onPause() {
         super.onPause();
-        int count = 0;
-        while (true) {
-            int listCheck = list.getCheckedItemPosition();
-            if (listCheck != ListView.INVALID_POSITION) {
-                titleList.remove(listCheck);
-                continue;
-            }
-            break;
+        SharedPreferences pref = getSharedPreferences("titleList",0);
+        SharedPreferences.Editor edit = pref.edit();
+        for(int i=0; i<listItem.size(); i++){
+            edit.putString(""+i,listItem.get(i).title);
         }
-        SharedPreferences toDoListTitle = getSharedPreferences("toDoListTitle", 0);
-        SharedPreferences.Editor edit = toDoListTitle.edit();
-        for (String list : titleList) {
-            edit.putString("" + count, list);
-            count++;
-        }
-        edit.putInt("count", count);
+        edit.putInt("listItemSize",listItem.size());
         edit.apply();
     }
 
+
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-            case MAIN:
-                if (resultCode == Activity.RESULT_OK) {
-                    if (data.getBooleanExtra("isImportant", false)) {
-                        titleList.add(0, data.getStringExtra(MAINKEY));
-                    } else {
-                        titleList.add(data.getStringExtra(MAINKEY));
-                    }
-                    titleAdapter.notifyDataSetChanged();
-                } else {
-                    titleList.clear();
+        switch(requestCode){
+            case ADDLIST:
+                if(resultCode == RESULT_OK){
+                    String titleText = data.getStringExtra("titleText");
+                    listItem.add(new Item(titleText,false));
                 }
                 break;
-            case MAIN2:
-                if (resultCode == Activity.RESULT_OK) {
-                    int position = titleList.indexOf(data.getStringExtra("originalTitle"));
-                    titleList.remove(data.getStringExtra("originalTitle"));
-                    if (data.getBooleanExtra("isImportant", false)) {
-                        titleList.add(0, data.getStringExtra(MAINKEY));
-                        list.setItemChecked(data.getIntExtra("position",0),false);
-                        list.setItemChecked(0,true);
-                    } else {
-                        titleList.add(position, data.getStringExtra(MAINKEY));
-                    }
-                    titleAdapter.notifyDataSetChanged();
+            case CHANGELIST:
+                if(resultCode == RESULT_OK){
+                    String titleText = data.getStringExtra("titleText");
+                    int position = data.getIntExtra("position",0);
+                    listItem.remove(position);
+                    listItem.add(position, new Item(titleText, false));
                 }
                 break;
         }
+        adapter.notifyDataSetChanged();
+        list.clearChoices();
+    }
+}
+
+class Item {
+    String title;
+    Boolean check;
+
+    Item(String titleText, Boolean checkBox) {
+        title = titleText;
+        check = checkBox;
     }
 
 }
+
