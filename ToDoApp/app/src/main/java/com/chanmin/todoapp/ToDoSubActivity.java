@@ -28,23 +28,22 @@ public class ToDoSubActivity extends AppCompatActivity {
     EditText main;
     Button cancel;
     Button apply;
-    boolean isCancelClicked;
     int position;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_to_do_sub);
-        title = (EditText)findViewById(R.id.titleText);
-        main = (EditText)findViewById(R.id.mainText);
-        cancel = (Button)findViewById(R.id.cancel);
-        apply = (Button)findViewById(R.id.apply);
+        title = (EditText) findViewById(R.id.titleText);
+        main = (EditText) findViewById(R.id.mainText);
+        cancel = (Button) findViewById(R.id.cancel);
+        apply = (Button) findViewById(R.id.apply);
         Intent intent = getIntent();
         titleText = intent.getStringExtra("titleText");
         position = intent.getIntExtra("position", 0);
         title.setText(titleText);
-        SharedPreferences pref  = getPreferences(0);
-        mainText = pref.getString(titleText,"");
+        SharedPreferences pref = getPreferences(0);
+        mainText = pref.getString(titleText, "");
         main.setText(mainText);
     }
 
@@ -64,9 +63,9 @@ public class ToDoSubActivity extends AppCompatActivity {
         edit.putString(titleT, mainT);
         edit.commit();
         Intent intent = new Intent();
-        intent.putExtra("titleText",titleT);
+        intent.putExtra("titleText", titleT);
         intent.putExtra("position", position);
-        setResult(Activity.RESULT_OK,intent);
+        setResult(Activity.RESULT_OK, intent);
         finish();
     }
 }

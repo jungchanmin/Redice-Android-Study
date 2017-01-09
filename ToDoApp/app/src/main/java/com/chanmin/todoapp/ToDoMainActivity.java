@@ -29,7 +29,6 @@ public class ToDoMainActivity extends AppCompatActivity {
     ArrayList<Item> listItem;
     Boolean deleteItem[];
     ListAdapter adapter;
-    CheckBox check;
     ListView list;
     final int ADDLIST = 0;
     final int CHANGELIST = 1;
@@ -40,28 +39,28 @@ public class ToDoMainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_to_do_main);
         listItem = new ArrayList<>();
         SharedPreferences pref = getSharedPreferences("titleList", 0);
-        int count = pref.getInt("listItemSize",0);
-        for(int i =0; i<count; i++){
-            listItem.add(new Item(pref.getString(""+i,""),false));
+        int count = pref.getInt("listItemSize", 0);
+        for (int i = 0; i < count; i++) {
+            listItem.add(new Item(pref.getString("" + i, ""), false));
         }
         adapter = new ListAdapter(this, R.layout.activity_list_view_item, listItem);
         list = (ListView) findViewById(R.id.listView);
         list.setAdapter(adapter);
         deleteItem = new Boolean[listItem.size()];
-        for(int i =0; i<deleteItem.length; i++){
+        for (int i = 0; i < deleteItem.length; i++) {
             deleteItem[i] = false;
         }
     }
 
     public void addNewListButtonClicked(View v) {
         Intent intent = new Intent(ToDoMainActivity.this, ToDoSubActivity.class);
-        intent.putExtra("titleText","");
+        intent.putExtra("titleText", "");
         startActivityForResult(intent, ADDLIST);
     }
 
     public void deleteButtonClicked(View v) {
-        for(int i = adapter.getCount()-1; i >= 0; i--){
-            if(deleteItem[i]){
+        for (int i = adapter.getCount() - 1; i >= 0; i--) {
+            if (deleteItem[i]) {
                 listItem.remove(i);
             }
         }
@@ -73,56 +72,48 @@ public class ToDoMainActivity extends AppCompatActivity {
         boolean isCheck = ((CheckBox) checkView).isChecked();
         CheckBox check = (CheckBox) checkView;
         int position = Integer.parseInt(check.getTag().toString());
-        if(isCheck){
+        if (isCheck) {
             check.setChecked(true);
             deleteItem[position] = true;
-        }else {
+        } else {
             check.setChecked(false);
             deleteItem[position] = false;
         }
     }
-    public void listTitleClicked(View clickedView){
+
+    public void listTitleClicked(View clickedView) {
         int position = Integer.parseInt(clickedView.getTag().toString());
         String clickedTitleText = ((TextView) clickedView).getText().toString();
         Intent intent = new Intent(ToDoMainActivity.this, ToDoSubActivity.class);
         intent.putExtra("titleText", clickedTitleText);
         intent.putExtra("position", position);
-        startActivityForResult(intent,CHANGELIST);
+        startActivityForResult(intent, CHANGELIST);
     }
-    /*
-    AdapterView.OnItemClickListener listViewClickListener = new AdapterView.OnItemClickListener() {
-        public void onItemClick(AdapterView<?> parentView, View clickedView, int position, long id) {
-            String clickedTitleText = ((TextView) clickedView).getText().toString();
-            Intent intent = new Intent(ToDoMainActivity.this, ToDoSubActivity.class);
-            intent.putExtra("titleText",clickedTitleText);
-            startActivity(intent);
-        }
-    };*/
 
     public void onPause() {
         super.onPause();
-        SharedPreferences pref = getSharedPreferences("titleList",0);
+        SharedPreferences pref = getSharedPreferences("titleList", 0);
         SharedPreferences.Editor edit = pref.edit();
-        for(int i=0; i<listItem.size(); i++){
-            edit.putString(""+i,listItem.get(i).title);
+        for (int i = 0; i < listItem.size(); i++) {
+            edit.putString("" + i, listItem.get(i).title);
         }
-        edit.putInt("listItemSize",listItem.size());
+        edit.putInt("listItemSize", listItem.size());
         edit.apply();
     }
 
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch(requestCode){
+        switch (requestCode) {
             case ADDLIST:
-                if(resultCode == RESULT_OK){
+                if (resultCode == RESULT_OK) {
                     String titleText = data.getStringExtra("titleText");
-                    listItem.add(new Item(titleText,false));
+                    listItem.add(new Item(titleText, false));
                 }
                 break;
             case CHANGELIST:
-                if(resultCode == RESULT_OK){
+                if (resultCode == RESULT_OK) {
                     String titleText = data.getStringExtra("titleText");
-                    int position = data.getIntExtra("position",0);
+                    int position = data.getIntExtra("position", 0);
                     listItem.remove(position);
                     listItem.add(position, new Item(titleText, false));
                 }
