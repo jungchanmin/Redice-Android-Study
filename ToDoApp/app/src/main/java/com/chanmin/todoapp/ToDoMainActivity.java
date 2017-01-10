@@ -1,33 +1,20 @@
 package com.chanmin.todoapp;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.util.SparseBooleanArray;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CheckedTextView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
-import java.util.zip.Inflater;
 
 public class ToDoMainActivity extends AppCompatActivity {
     ArrayList<Item> listItem;
-    Boolean deleteItem[];
+    Boolean []deleteItem;
     ListAdapter adapter;
     ListView list;
     final int ADDLIST = 0;
@@ -46,7 +33,11 @@ public class ToDoMainActivity extends AppCompatActivity {
         adapter = new ListAdapter(this, R.layout.activity_list_view_item, listItem);
         list = (ListView) findViewById(R.id.listView);
         list.setAdapter(adapter);
-        deleteItem = new Boolean[listItem.size()];
+        if(listItem.size() < 1){
+            deleteItem = new Boolean[1];
+        }else {
+            deleteItem = new Boolean[listItem.size()];
+        }
         for (int i = 0; i < deleteItem.length; i++) {
             deleteItem[i] = false;
         }
@@ -95,7 +86,7 @@ public class ToDoMainActivity extends AppCompatActivity {
         SharedPreferences pref = getSharedPreferences("titleList", 0);
         SharedPreferences.Editor edit = pref.edit();
         for (int i = 0; i < listItem.size(); i++) {
-            edit.putString("" + i, listItem.get(i).title);
+            edit.putString("" + i, listItem.get(i).getTitle());
         }
         edit.putInt("listItemSize", listItem.size());
         edit.apply();
@@ -108,6 +99,10 @@ public class ToDoMainActivity extends AppCompatActivity {
                 if (resultCode == RESULT_OK) {
                     String titleText = data.getStringExtra("titleText");
                     listItem.add(new Item(titleText, false));
+                    deleteItem = new Boolean[listItem.size()];
+                    for(int i = 0; i<deleteItem.length; i++){
+                        deleteItem[i] = false;
+                    }
                 }
                 break;
             case CHANGELIST:
@@ -122,16 +117,5 @@ public class ToDoMainActivity extends AppCompatActivity {
         adapter.notifyDataSetChanged();
         list.clearChoices();
     }
-}
-
-class Item {
-    String title;
-    Boolean check;
-
-    Item(String titleText, Boolean checkBox) {
-        title = titleText;
-        check = checkBox;
-    }
-
 }
 

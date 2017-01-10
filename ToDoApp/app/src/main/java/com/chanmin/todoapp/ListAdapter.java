@@ -19,38 +19,34 @@ class ListAdapter extends BaseAdapter {
     ArrayList<Item> list;
     int layout;
 
-    public ListAdapter(Context cont, int lay, ArrayList<Item> li) {
-        context = cont;
-        inflater = (LayoutInflater) cont.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        list = li;
-        layout = lay;
+    public ListAdapter(Context context, int layout, ArrayList<Item> list) {
+        this.context = context;
+        inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        this.list = list;
+        this.layout = layout;
     }
-
     public int getCount() {
         return list.size();
     }
-
     public String getItem(int position) {
-        return list.get(position).title;
+        return list.get(position).getTitle();
     }
-
+    public Boolean getItem2(int position){
+        return list.get(position).getCheck();
+    }
     public long getItemId(int position) {
         return position;
     }
-    public Boolean getCheck(int position){
-        return list.get(position).check;
-    }
     public View getView(int position, View convertView, ViewGroup parent) {
-        final int POS = position;
         if (convertView == null) {
             convertView = inflater.inflate(layout, parent, false);
         }
         TextView text = (TextView) convertView.findViewById(R.id.listTitle);
         text.setTag(position);
-        text.setText(list.get(position).title);
+        text.setText(getItem(position));
         CheckBox checkBox = (CheckBox) convertView.findViewById(R.id.checkBox);
         checkBox.setTag(position);
-        checkBox.setChecked(list.get(position).check);
+        checkBox.setChecked(getItem2(position));
         return convertView;
     }
 }
