@@ -36,33 +36,39 @@ public class ToDoSubActivity extends AppCompatActivity {
         title.setText(titleText);
         SharedPreferences pref = getPreferences(0);
         mainText = pref.getString(titleText, "");
-        important = pref.getBoolean("important", false);
         main.setText(mainText);
-        if(important){
-            checkBox.setChecked(true);
+        if (!titleText.equals("")){
+            String shortCut = titleText.substring(titleText.length() - 1, titleText.length());
+            if(shortCut.equals("*")){
+                checkBox.setChecked(true);
+                important = true;
+            } else{
+                important = false;
+            }
+        } else {
+            important = false;
         }
     }
-
     public void cancelButtonClicked(View v) {
         setResult(RESULT_CANCELED);
         finish();
     }
 
     public void checking(View v) {
-        if(important){
+        if (important) {
             important = false;
-        }else{
+        } else {
             important = true;
         }
         String importantCheck = title.getText().toString();
         int importantCheckLength = importantCheck.length();
-        if(!importantCheck.equals("")) {
+        if (!importantCheck.equals("")) {
             String symbol = importantCheck.substring(importantCheckLength - 1, importantCheckLength);
-            if(!symbol.equals("*")){
+            if (!symbol.equals("*")) {
                 importantCheck += "*";
                 title.setText(importantCheck);
             } else {
-                importantCheck = importantCheck.substring(0 , importantCheckLength-1);
+                importantCheck = importantCheck.substring(0, importantCheckLength - 1);
                 title.setText(importantCheck);
             }
         }
@@ -79,7 +85,7 @@ public class ToDoSubActivity extends AppCompatActivity {
         Intent intent = new Intent();
         intent.putExtra("titleText", titleT);
         intent.putExtra("position", position);
-        intent.putExtra("important",important);
+        intent.putExtra("important", important);
         setResult(Activity.RESULT_OK, intent);
         finish();
     }
