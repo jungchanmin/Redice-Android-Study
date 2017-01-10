@@ -98,7 +98,11 @@ public class ToDoMainActivity extends AppCompatActivity {
             case ADDLIST:
                 if (resultCode == RESULT_OK) {
                     String titleText = data.getStringExtra("titleText");
-                    listItem.add(new Item(titleText, false));
+                    if(data.getBooleanExtra("important",false)){
+                        listItem.add(0, new Item(titleText, false));
+                    }else{
+                        listItem.add(new Item(titleText, false));
+                    }
                     deleteItem = new Boolean[listItem.size()];
                     for(int i = 0; i<deleteItem.length; i++){
                         deleteItem[i] = false;
@@ -110,7 +114,11 @@ public class ToDoMainActivity extends AppCompatActivity {
                     String titleText = data.getStringExtra("titleText");
                     int position = data.getIntExtra("position", 0);
                     listItem.remove(position);
-                    listItem.add(position, new Item(titleText, false));
+                    if(data.getBooleanExtra("important",false)){
+                        listItem.add(0, new Item(titleText, false));
+                    }else {
+                        listItem.add(position, new Item(titleText, false));
+                    }
                 }
                 break;
         }
