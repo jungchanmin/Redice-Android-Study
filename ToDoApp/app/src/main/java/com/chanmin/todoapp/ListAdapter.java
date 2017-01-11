@@ -31,16 +31,8 @@ class ListAdapter extends BaseAdapter {
         return list.size();
     }
 
-    public String getItem(int position) {
-        return list.get(position).getTitle();
-    }
-
-    public Boolean getItem2(int position) {
-        return list.get(position).getCheck();
-    }
-
-    public String getItem3(int position) {
-        return list.get(position).getColor();
+    public Item getItem(int position) {
+        return list.get(position);
     }
 
     public long getItemId(int position) {
@@ -53,11 +45,11 @@ class ListAdapter extends BaseAdapter {
         }
         TextView text = (TextView) convertView.findViewById(R.id.listTitle);
         text.setTag(position);
-        text.setText(getItem(position));
-        text.setTextColor(Color.parseColor(getItem3(position)));
+        text.setText(getItem(position).getTitle());
+        text.setTextColor(Color.parseColor(getItem(position).getColor()));
         CheckBox checkBox = (CheckBox) convertView.findViewById(R.id.checkBox);
         checkBox.setTag(position);
-        checkBox.setChecked(getItem2(position));
+        checkBox.setChecked(getItem(position).getCheck());
         return convertView;
     }
 }
