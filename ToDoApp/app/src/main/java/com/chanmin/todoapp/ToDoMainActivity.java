@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ListView;
@@ -14,9 +15,11 @@ import java.util.ArrayList;
 
 public class ToDoMainActivity extends AppCompatActivity {
     ArrayList<Item> listItem;
-    Boolean []deleteItem;
+    Boolean[] deleteItem;
     ListAdapter adapter;
     ListView list;
+    String colorDefault;
+    String importantColor;
     final int ADDLIST = 0;
     final int CHANGELIST = 1;
 
@@ -24,18 +27,21 @@ public class ToDoMainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_to_do_main);
+        colorDefault = "#000000";
+        importantColor = "#FF4500";
         listItem = new ArrayList<>();
         SharedPreferences pref = getSharedPreferences("titleList", 0);
         int count = pref.getInt("listItemSize", 0);
         for (int i = 0; i < count; i++) {
-            listItem.add(new Item(pref.getString("" + i, ""), false));
+            String color = pref.getString(i + "Color", colorDefault);
+            listItem.add(new Item(pref.getString("" + i, ""), false, color));
         }
         adapter = new ListAdapter(this, R.layout.activity_list_view_item, listItem);
         list = (ListView) findViewById(R.id.listView);
         list.setAdapter(adapter);
-        if(listItem.size() < 1){
+        if (listItem.size() < 1) {
             deleteItem = new Boolean[1];
-        }else {
+        } else {
             deleteItem = new Boolean[listItem.size()];
         }
         for (int i = 0; i < deleteItem.length; i++) {
@@ -75,9 +81,11 @@ public class ToDoMainActivity extends AppCompatActivity {
     public void listTitleClicked(View clickedView) {
         int position = Integer.parseInt(clickedView.getTag().toString());
         String clickedTitleText = ((TextView) clickedView).getText().toString();
+        Boolean important = (listItem.get(position).getColor()).equals(importantColor);
         Intent intent = new Intent(ToDoMainActivity.this, ToDoSubActivity.class);
         intent.putExtra("titleText", clickedTitleText);
         intent.putExtra("position", position);
+        intent.putExtra("important", important);
         startActivityForResult(intent, CHANGELIST);
     }
 
@@ -87,6 +95,7 @@ public class ToDoMainActivity extends AppCompatActivity {
         SharedPreferences.Editor edit = pref.edit();
         for (int i = 0; i < listItem.size(); i++) {
             edit.putString("" + i, listItem.get(i).getTitle());
+            edit.putString(i + "Color", listItem.get(i).getColor());
         }
         edit.putInt("listItemSize", listItem.size());
         edit.apply();
@@ -94,36 +103,36 @@ public class ToDoMainActivity extends AppCompatActivity {
 
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-            case ADDLIST:
-                if (resultCode == RESULT_OK) {
-                    String titleText = data.getStringExtra("titleText");
-                    if(data.getBooleanExtra("important",false)){
-                        listItem.add(0, new Item(titleText, false));
-                    }else{
-                        listItem.add(new Item(titleText, false));
+        String titleText;
+        Boolean isImportant;
+        if (resultCode == RESULT_OK) {
+            titleText = data.getStringExtra("titleText");
+            isImportant = data.getBooleanExtra("important", false);
+            switch (requestCode) {
+                case ADDLIST:
+                    if (isImportant) {
+                        listItem.add(0, new Item(titleText, false, importantColor));
+                    } else {
+                        listItem.add(new Item(titleText, false, colorDefault));
                     }
                     deleteItem = new Boolean[listItem.size()];
-                    for(int i = 0; i<deleteItem.length; i++){
+                    for (int i = 0; i < deleteItem.length; i++) {
                         deleteItem[i] = false;
                     }
-                }
-                break;
-            case CHANGELIST:
-                if (resultCode == RESULT_OK) {
-                    String titleText = data.getStringExtra("titleText");
+                    break;
+                case CHANGELIST:
                     int position = data.getIntExtra("position", 0);
                     listItem.remove(position);
-                    if(data.getBooleanExtra("important",false)){
-                        listItem.add(0, new Item(titleText, false));
-                    }else {
-                        listItem.add(position, new Item(titleText, false));
+                    if (isImportant) {
+                        listItem.add(0, new Item(titleText, false, importantColor));
+                    } else {
+                        listItem.add(position, new Item(titleText, false, colorDefault));
                     }
-                }
-                break;
+                    break;
+            }
+            adapter.notifyDataSetChanged();
+            list.clearChoices();
         }
-        adapter.notifyDataSetChanged();
-        list.clearChoices();
     }
 }
 

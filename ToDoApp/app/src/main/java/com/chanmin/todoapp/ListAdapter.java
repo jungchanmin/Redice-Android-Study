@@ -1,6 +1,7 @@
 package com.chanmin.todoapp;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,18 +26,27 @@ class ListAdapter extends BaseAdapter {
         this.list = list;
         this.layout = layout;
     }
+
     public int getCount() {
         return list.size();
     }
+
     public String getItem(int position) {
         return list.get(position).getTitle();
     }
-    public Boolean getItem2(int position){
+
+    public Boolean getItem2(int position) {
         return list.get(position).getCheck();
     }
+
+    public String getItem3(int position) {
+        return list.get(position).getColor();
+    }
+
     public long getItemId(int position) {
         return position;
     }
+
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
             convertView = inflater.inflate(layout, parent, false);
@@ -44,6 +54,7 @@ class ListAdapter extends BaseAdapter {
         TextView text = (TextView) convertView.findViewById(R.id.listTitle);
         text.setTag(position);
         text.setText(getItem(position));
+        text.setTextColor(Color.parseColor(getItem3(position)));
         CheckBox checkBox = (CheckBox) convertView.findViewById(R.id.checkBox);
         checkBox.setTag(position);
         checkBox.setChecked(getItem2(position));

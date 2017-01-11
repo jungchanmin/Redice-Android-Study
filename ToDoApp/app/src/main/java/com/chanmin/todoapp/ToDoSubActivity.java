@@ -3,6 +3,7 @@ package com.chanmin.todoapp;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -13,6 +14,8 @@ import android.widget.EditText;
 public class ToDoSubActivity extends AppCompatActivity {
     String titleText;
     String mainText;
+    String importantColor;
+    String defaultColor;
     EditText title;
     EditText main;
     Button cancel;
@@ -33,44 +36,32 @@ public class ToDoSubActivity extends AppCompatActivity {
         Intent intent = getIntent();
         titleText = intent.getStringExtra("titleText");
         position = intent.getIntExtra("position", 0);
+        important = intent.getBooleanExtra("important", false);
         title.setText(titleText);
         SharedPreferences pref = getPreferences(0);
         mainText = pref.getString(titleText, "");
         main.setText(mainText);
-        if (!titleText.equals("")){
-            String shortCut = titleText.substring(titleText.length() - 1, titleText.length());
-            if(shortCut.equals("*")){
-                checkBox.setChecked(true);
-                important = true;
-            } else{
-                important = false;
-            }
+        importantColor = "#FF4500";
+        defaultColor = "#000000";
+        if (important) {
+            title.setTextColor(Color.parseColor(importantColor));
+            checkBox.setChecked(true);
         } else {
-            important = false;
+            title.setTextColor(Color.parseColor(defaultColor));
         }
     }
+
     public void cancelButtonClicked(View v) {
         setResult(RESULT_CANCELED);
         finish();
     }
 
     public void checking(View v) {
+        important = !important;
         if (important) {
-            important = false;
+            title.setTextColor(Color.parseColor(importantColor));
         } else {
-            important = true;
-        }
-        String importantCheck = title.getText().toString();
-        int importantCheckLength = importantCheck.length();
-        if (!importantCheck.equals("")) {
-            String symbol = importantCheck.substring(importantCheckLength - 1, importantCheckLength);
-            if (!symbol.equals("*")) {
-                importantCheck += "*";
-                title.setText(importantCheck);
-            } else {
-                importantCheck = importantCheck.substring(0, importantCheckLength - 1);
-                title.setText(importantCheck);
-            }
+            title.setTextColor(Color.parseColor(defaultColor));
         }
     }
 

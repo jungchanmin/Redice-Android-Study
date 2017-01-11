@@ -6,16 +6,24 @@ package com.chanmin.todoapp;
 class Item {
     private String title;
     private Boolean check;
+    private String color;
 
-    Item(String title, Boolean check) {
+    Item(String title, Boolean check, String color) {
         this.title = title;
         this.check = check;
+        this.color = color;
     }
-    public String getTitle(){
+
+    String getTitle() {
         return title;
     }
-    public Boolean getCheck(){
+
+    Boolean getCheck() {
         return check;
+    }
+
+    String getColor() {
+        return color;
     }
 
 }
