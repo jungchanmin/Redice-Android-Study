@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ListView;
@@ -34,11 +33,8 @@ public class ToDoMainActivity extends AppCompatActivity {
         int count = pref.getInt("listItemSize", 0);
         for (int i = 0; i < count; i++) {
             String color = pref.getString(i + "Color", colorDefault);
-            listItem.add(new Item(pref.getString("" + i, ""), false, color));
+            listItem.add(new Item(pref.getString("" + i, ""), color));
         }
-        adapter = new ListAdapter(this, R.layout.activity_list_view_item, listItem);
-        list = (ListView) findViewById(R.id.listView);
-        list.setAdapter(adapter);
         if (listItem.size() < 1) {
             deleteItem = new Boolean[1];
         } else {
@@ -47,7 +43,12 @@ public class ToDoMainActivity extends AppCompatActivity {
         for (int i = 0; i < deleteItem.length; i++) {
             deleteItem[i] = false;
         }
+        adapter = new ListAdapter(this, R.layout.activity_list_view_item, listItem, deleteItem);
+        list = (ListView) findViewById(R.id.listView);
+        list.setAdapter(adapter);
+
     }
+
 
     public void addNewListButtonClicked(View v) {
         Intent intent = new Intent(ToDoMainActivity.this, ToDoSubActivity.class);
@@ -61,8 +62,12 @@ public class ToDoMainActivity extends AppCompatActivity {
                 listItem.remove(i);
             }
         }
-        adapter.notifyDataSetChanged();
+        for (int i = 0; i < deleteItem.length; i++) {
+            deleteItem[i] = false;
+        }
+
         list.clearChoices();
+        adapter.notifyDataSetChanged();
     }
 
     public void checkBoxClicked(View checkView) {
@@ -76,6 +81,7 @@ public class ToDoMainActivity extends AppCompatActivity {
             check.setChecked(false);
             deleteItem[position] = false;
         }
+
     }
 
     public void listTitleClicked(View clickedView) {
@@ -111,9 +117,9 @@ public class ToDoMainActivity extends AppCompatActivity {
             switch (requestCode) {
                 case ADDLIST:
                     if (isImportant) {
-                        listItem.add(0, new Item(titleText, false, importantColor));
+                        listItem.add(0, new Item(titleText, importantColor));
                     } else {
-                        listItem.add(new Item(titleText, false, colorDefault));
+                        listItem.add(new Item(titleText, colorDefault));
                     }
                     deleteItem = new Boolean[listItem.size()];
                     for (int i = 0; i < deleteItem.length; i++) {
@@ -124,9 +130,9 @@ public class ToDoMainActivity extends AppCompatActivity {
                     int position = data.getIntExtra("position", 0);
                     listItem.remove(position);
                     if (isImportant) {
-                        listItem.add(0, new Item(titleText, false, importantColor));
+                        listItem.add(0, new Item(titleText, importantColor));
                     } else {
-                        listItem.add(position, new Item(titleText, false, colorDefault));
+                        listItem.add(position, new Item(titleText, colorDefault));
                     }
                     break;
             }

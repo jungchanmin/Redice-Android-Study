@@ -2,6 +2,7 @@ package com.chanmin.todoapp;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,12 +20,14 @@ class ListAdapter extends BaseAdapter {
     LayoutInflater inflater;
     ArrayList<Item> list;
     int layout;
+    Boolean[] deleteItem;
 
-    public ListAdapter(Context context, int layout, ArrayList<Item> list) {
+    public ListAdapter(Context context, int layout, ArrayList<Item> list, Boolean[] deleteItem) {
         this.context = context;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.list = list;
         this.layout = layout;
+        this.deleteItem = deleteItem;
     }
 
     public int getCount() {
@@ -49,7 +52,14 @@ class ListAdapter extends BaseAdapter {
         text.setTextColor(Color.parseColor(getItem(position).getColor()));
         CheckBox checkBox = (CheckBox) convertView.findViewById(R.id.checkBox);
         checkBox.setTag(position);
-        checkBox.setChecked(getItem(position).getCheck());
+        checkBox.setChecked(false);
+        if (deleteItem[position] != null) {
+            if (deleteItem[position]) {
+                checkBox.setChecked(true);
+            }
+        } else {
+            Log.i("DeleteItemError", "position : " + position + " //Error");
+        }
         return convertView;
     }
 }

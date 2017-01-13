@@ -5,21 +5,15 @@ package com.chanmin.todoapp;
  */
 class Item {
     private String title;
-    private Boolean check;
     private String color;
 
-    Item(String title, Boolean check, String color) {
+    Item(String title, String color) {
         this.title = title;
-        this.check = check;
         this.color = color;
     }
 
     String getTitle() {
         return title;
-    }
-
-    Boolean getCheck() {
-        return check;
     }
 
     String getColor() {
