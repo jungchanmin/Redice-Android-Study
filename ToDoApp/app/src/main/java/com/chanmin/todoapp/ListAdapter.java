@@ -43,22 +43,24 @@ class ListAdapter extends BaseAdapter {
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
+        ViewHolder viewHolder;
         if (convertView == null) {
             convertView = inflater.inflate(layout, parent, false);
+
+            viewHolder = new ViewHolder();
+            viewHolder.title = (TextView) convertView.findViewById(R.id.listTitle);
+            viewHolder.check = (CheckBox) convertView.findViewById(R.id.checkBox);
+            viewHolder.title.setTag(position);
+            viewHolder.check.setTag(position);
+            convertView.setTag(viewHolder);
+        }else{
+            viewHolder = (ViewHolder) convertView.getTag();
         }
-        TextView text = (TextView) convertView.findViewById(R.id.listTitle);
-        text.setTag(position);
-        text.setText(getItem(position).getTitle());
-        text.setTextColor(Color.parseColor(getItem(position).getColor()));
-        CheckBox checkBox = (CheckBox) convertView.findViewById(R.id.checkBox);
-        checkBox.setTag(position);
-        checkBox.setChecked(false);
-        if (deleteItem[position] != null) {
-            if (deleteItem[position]) {
-                checkBox.setChecked(true);
-            }
-        } else {
-            Log.i("DeleteItemError", "position : " + position + " //Error");
+        viewHolder.title.setText(getItem(position).getTitle());
+        viewHolder.title.setTextColor(Color.parseColor(getItem(position).getColor()));
+        viewHolder.check.setChecked(false);
+        if (deleteItem[position]) {
+            viewHolder.check.setChecked(true);
         }
         return convertView;
     }

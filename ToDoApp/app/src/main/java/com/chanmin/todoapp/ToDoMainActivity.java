@@ -65,7 +65,6 @@ public class ToDoMainActivity extends AppCompatActivity {
         for (int i = 0; i < deleteItem.length; i++) {
             deleteItem[i] = false;
         }
-
         list.clearChoices();
         adapter.notifyDataSetChanged();
     }
@@ -136,7 +135,8 @@ public class ToDoMainActivity extends AppCompatActivity {
                     }
                     break;
             }
-            adapter.notifyDataSetChanged();
+            adapter = new ListAdapter(this, R.layout.activity_list_view_item, listItem, deleteItem);
+            list.setAdapter(adapter);
             list.clearChoices();
         }
     }
