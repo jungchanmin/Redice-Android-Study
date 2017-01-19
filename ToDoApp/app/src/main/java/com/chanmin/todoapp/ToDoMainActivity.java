@@ -10,6 +10,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 
+import com.google.gson.Gson;
+
 import java.util.ArrayList;
 
 public class ToDoMainActivity extends AppCompatActivity {
@@ -35,14 +37,20 @@ public class ToDoMainActivity extends AppCompatActivity {
             String color = pref.getString(i + "Color", colorDefault);
             listItem.add(new Item(pref.getString("" + i, ""), color));
         }
+        Gson gson = new Gson();
+        String json = pref.getString("SaveData", "");
+        SaveData saveData = gson.fromJson(json, SaveData.class);
         if (listItem.size() < 1) {
             deleteItem = new Boolean[1];
-        } else {
+        }else {
+            deleteItem = saveData.deleteItem;
+        }
+        /* else {
             deleteItem = new Boolean[listItem.size()];
         }
         for (int i = 0; i < deleteItem.length; i++) {
             deleteItem[i] = false;
-        }
+        }*/
         adapter = new ListAdapter(this, R.layout.activity_list_view_item, listItem, deleteItem);
         list = (ListView) findViewById(R.id.listView);
         list.setAdapter(adapter);
@@ -103,7 +111,13 @@ public class ToDoMainActivity extends AppCompatActivity {
             edit.putString(i + "Color", listItem.get(i).getColor());
         }
         edit.putInt("listItemSize", listItem.size());
+        SaveData saveData = new SaveData(deleteItem);
+        Gson gson = new Gson();
+        String json = gson.toJson(saveData);
+        edit.putString("SaveData", json);
         edit.apply();
+
+
     }
 
 

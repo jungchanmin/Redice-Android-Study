@@ -15,7 +15,6 @@ class Item {
     String getTitle() {
         return title;
     }
-
     String getColor() {
         return color;
     }

@@ -43,24 +43,18 @@ class ListAdapter extends BaseAdapter {
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder viewHolder;
         if (convertView == null) {
             convertView = inflater.inflate(layout, parent, false);
-
-            viewHolder = new ViewHolder();
-            viewHolder.title = (TextView) convertView.findViewById(R.id.listTitle);
-            viewHolder.check = (CheckBox) convertView.findViewById(R.id.checkBox);
-            viewHolder.title.setTag(position);
-            viewHolder.check.setTag(position);
-            convertView.setTag(viewHolder);
-        }else{
-            viewHolder = (ViewHolder) convertView.getTag();
         }
-        viewHolder.title.setText(getItem(position).getTitle());
-        viewHolder.title.setTextColor(Color.parseColor(getItem(position).getColor()));
-        viewHolder.check.setChecked(false);
-        if (deleteItem[position]) {
-            viewHolder.check.setChecked(true);
+        TextView title = (TextView)convertView.findViewById(R.id.listTitle);
+        CheckBox check = (CheckBox)convertView.findViewById(R.id.checkBox);
+        title.setTag(position);
+        check.setTag(position);
+        title.setText(getItem(position).getTitle());
+        title.setTextColor(Color.parseColor(getItem(position).getColor()));
+        check.setChecked(false);
+        if(deleteItem[position]){
+            check.setChecked(true);
         }
         return convertView;
     }
