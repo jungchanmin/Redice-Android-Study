@@ -32,25 +32,16 @@ public class ToDoMainActivity extends AppCompatActivity {
         importantColor = "#FF4500";
         listItem = new ArrayList<>();
         SharedPreferences pref = getSharedPreferences("titleList", 0);
-        int count = pref.getInt("listItemSize", 0);
-        for (int i = 0; i < count; i++) {
-            String color = pref.getString(i + "Color", colorDefault);
-            listItem.add(new Item(pref.getString("" + i, ""), color));
-        }
         Gson gson = new Gson();
         String json = pref.getString("SaveData", "");
         SaveData saveData = gson.fromJson(json, SaveData.class);
-        if (listItem.size() < 1) {
+        int count = pref.getInt("listItemSize", 0);
+        if (count < 1) {
             deleteItem = new Boolean[1];
         }else {
             deleteItem = saveData.deleteItem;
+            listItem = saveData.listItem;
         }
-        /* else {
-            deleteItem = new Boolean[listItem.size()];
-        }
-        for (int i = 0; i < deleteItem.length; i++) {
-            deleteItem[i] = false;
-        }*/
         adapter = new ListAdapter(this, R.layout.activity_list_view_item, listItem, deleteItem);
         list = (ListView) findViewById(R.id.listView);
         list.setAdapter(adapter);
@@ -111,7 +102,7 @@ public class ToDoMainActivity extends AppCompatActivity {
             edit.putString(i + "Color", listItem.get(i).getColor());
         }
         edit.putInt("listItemSize", listItem.size());
-        SaveData saveData = new SaveData(deleteItem);
+        SaveData saveData = new SaveData(deleteItem, listItem);
         Gson gson = new Gson();
         String json = gson.toJson(saveData);
         edit.putString("SaveData", json);
