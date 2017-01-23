@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -41,21 +42,32 @@ class ListAdapter extends BaseAdapter {
     public long getItemId(int position) {
         return position;
     }
-
     public View getView(int position, View convertView, ViewGroup parent) {
+        ViewHolder holder;
         if (convertView == null) {
             convertView = inflater.inflate(layout, parent, false);
+            holder = new ViewHolder();
+            holder.title = (TextView)convertView.findViewById(R.id.listTitle);
+            holder.check = (CheckBox)convertView.findViewById(R.id.checkBox);
+            convertView.setTag(holder);
+        }else{
+            holder = (ViewHolder)convertView.getTag();
+            //holder.check.setOnCheckedChangeListener(null);
         }
-        TextView title = (TextView)convertView.findViewById(R.id.listTitle);
-        CheckBox check = (CheckBox)convertView.findViewById(R.id.checkBox);
-        title.setTag(position);
-        check.setTag(position);
-        title.setText(getItem(position).getTitle());
-        title.setTextColor(Color.parseColor(getItem(position).getColor()));
-        check.setChecked(false);
+        holder.title.setTag(position);
+        holder.check.setTag(position);
+        holder.title.setText(getItem(position).getTitle());
+        holder.title.setTextColor(Color.parseColor(getItem(position).getColor()));
+        holder.check.setChecked(false);
         if(deleteItem[position]){
-            check.setChecked(true);
+            holder.check.setChecked(true);
         }
         return convertView;
     }
+    /*private CompoundButton.OnCheckedChangeListener checkListener = new CompoundButton.OnCheckedChangeListener() {
+        @Override
+        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            list.get(position).isChecked = isChecked;
+        }
+    };*/
 }
