@@ -45,7 +45,6 @@ public class ToDoMainActivity extends AppCompatActivity {
         adapter = new ListAdapter(this, R.layout.activity_list_view_item, listItem, deleteItem);
         list = (ListView) findViewById(R.id.listView);
         list.setAdapter(adapter);
-
     }
 
 
@@ -97,18 +96,12 @@ public class ToDoMainActivity extends AppCompatActivity {
         super.onPause();
         SharedPreferences pref = getSharedPreferences("titleList", 0);
         SharedPreferences.Editor edit = pref.edit();
-        for (int i = 0; i < listItem.size(); i++) {
-            edit.putString("" + i, listItem.get(i).getTitle());
-            edit.putString(i + "Color", listItem.get(i).getColor());
-        }
         edit.putInt("listItemSize", listItem.size());
         SaveData saveData = new SaveData(deleteItem, listItem);
         Gson gson = new Gson();
         String json = gson.toJson(saveData);
         edit.putString("SaveData", json);
         edit.apply();
-
-
     }
 
 
@@ -132,11 +125,22 @@ public class ToDoMainActivity extends AppCompatActivity {
                     break;
                 case CHANGELIST:
                     int position = data.getIntExtra("position", 0);
+                    boolean isChecked = deleteItem[position];
+                    deleteItem = new Boolean[listItem.size()];
+                    for(int i = 0; i < deleteItem.length; i++){
+                        deleteItem[i] = false;
+                    }
                     listItem.remove(position);
                     if (isImportant) {
                         listItem.add(0, new Item(titleText, importantColor));
+                        if(isChecked){
+                            deleteItem[0] = true;
+                        }
                     } else {
                         listItem.add(position, new Item(titleText, colorDefault));
+                        if(isChecked){
+                            deleteItem[position] = true;
+                        }
                     }
                     break;
             }

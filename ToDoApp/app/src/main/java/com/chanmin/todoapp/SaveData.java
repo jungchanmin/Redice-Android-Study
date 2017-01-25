@@ -8,7 +8,8 @@ import java.util.ArrayList;
 public class SaveData {
     Boolean[] deleteItem;
     ArrayList<Item> listItem;
-    SaveData(Boolean[] deleteItem, ArrayList<Item>listItem){
+
+    SaveData(Boolean[] deleteItem, ArrayList<Item>listItem) {
         this.deleteItem = deleteItem;
         this.listItem = listItem;
     }

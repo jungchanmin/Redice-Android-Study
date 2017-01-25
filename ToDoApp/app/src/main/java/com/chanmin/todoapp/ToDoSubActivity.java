@@ -71,7 +71,6 @@ public class ToDoSubActivity extends AppCompatActivity {
         SharedPreferences pref = getPreferences(0);
         SharedPreferences.Editor edit = pref.edit();
         edit.putString(titleT, mainT);
-        edit.putBoolean("important", important);
         edit.commit();
         Intent intent = new Intent();
         intent.putExtra("titleText", titleT);
