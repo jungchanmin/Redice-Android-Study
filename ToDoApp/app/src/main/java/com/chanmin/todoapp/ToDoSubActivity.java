@@ -23,6 +23,7 @@ public class ToDoSubActivity extends AppCompatActivity {
     int position;
     Boolean important;
     CheckBox checkBox;
+    Boolean importantSetting;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +38,11 @@ public class ToDoSubActivity extends AppCompatActivity {
         titleText = intent.getStringExtra("titleText");
         position = intent.getIntExtra("position", 0);
         important = intent.getBooleanExtra("important", false);
+        if(important){
+            importantSetting = true;
+        }else{
+            importantSetting = false;
+        }
         title.setText(titleText);
         SharedPreferences pref = getPreferences(0);
         mainText = pref.getString(titleText, "");
@@ -76,6 +82,11 @@ public class ToDoSubActivity extends AppCompatActivity {
         intent.putExtra("titleText", titleT);
         intent.putExtra("position", position);
         intent.putExtra("important", important);
+        if(importantSetting){
+            if(!important){
+                intent.putExtra("importantSetting", true);
+            }
+        }
         setResult(Activity.RESULT_OK, intent);
         finish();
     }

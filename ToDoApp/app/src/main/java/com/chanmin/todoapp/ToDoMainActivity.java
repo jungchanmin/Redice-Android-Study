@@ -137,7 +137,11 @@ public class ToDoMainActivity extends AppCompatActivity {
                             deleteItem[0] = true;
                         }
                     } else {
-                        listItem.add(position, new Item(titleText, colorDefault));
+                        if(data.getBooleanExtra("importantSetting", false)){
+                            listItem.add(new Item(titleText, colorDefault));
+                        }else {
+                            listItem.add(position, new Item(titleText, colorDefault));
+                        }
                         if(isChecked){
                             deleteItem[position] = true;
                         }
