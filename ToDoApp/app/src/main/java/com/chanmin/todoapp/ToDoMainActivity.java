@@ -37,7 +37,7 @@ public class ToDoMainActivity extends AppCompatActivity {
         SaveData saveData = gson.fromJson(json, SaveData.class);
         int count = pref.getInt("listItemSize", 0);
         if (count < 1) {
-            deleteItem = new Boolean[1];
+            deleteItem = new Boolean[0];
         }else {
             deleteItem = saveData.deleteItem;
             listItem = saveData.listItem;
@@ -60,11 +60,12 @@ public class ToDoMainActivity extends AppCompatActivity {
                 listItem.remove(i);
             }
         }
+        deleteItem = new Boolean[listItem.size()];
         for (int i = 0; i < deleteItem.length; i++) {
             deleteItem[i] = false;
         }
-        list.clearChoices();
-        adapter.notifyDataSetChanged();
+        adapter = new ListAdapter(this, R.layout.activity_list_view_item, listItem, deleteItem);
+        list.setAdapter(adapter);
     }
 
     public void checkBoxClicked(View checkView) {
@@ -108,6 +109,18 @@ public class ToDoMainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         String titleText;
         Boolean isImportant;
+        Boolean isChangeItemClick = false;
+        int position = 0;
+        if(resultCode != RESULT_CANCELED){
+            position = data.getIntExtra("position", 0);
+        }
+        ArrayList<Boolean> delete = new ArrayList<Boolean>();
+        for(Boolean deletingItem : deleteItem){
+            delete.add(deletingItem);
+        }
+        if(deleteItem.length > 1){
+            isChangeItemClick = deleteItem[position];
+        }
         if (resultCode == RESULT_OK) {
             titleText = data.getStringExtra("titleText");
             isImportant = data.getBooleanExtra("important", false);
@@ -122,10 +135,11 @@ public class ToDoMainActivity extends AppCompatActivity {
                     for (int i = 0; i < deleteItem.length; i++) {
                         deleteItem[i] = false;
                     }
+                    for(int i = 0; i< delete.size(); i++){
+                        deleteItem[i] = delete.get(i);
+                    }
                     break;
                 case CHANGELIST:
-                    int position = data.getIntExtra("position", 0);
-                    boolean isChecked = deleteItem[position];
                     deleteItem = new Boolean[listItem.size()];
                     for(int i = 0; i < deleteItem.length; i++){
                         deleteItem[i] = false;
@@ -133,24 +147,27 @@ public class ToDoMainActivity extends AppCompatActivity {
                     listItem.remove(position);
                     if (isImportant) {
                         listItem.add(0, new Item(titleText, importantColor));
-                        if(isChecked){
-                            deleteItem[0] = true;
+                        delete.remove(position);
+                        delete.add(0, isChangeItemClick);
+                        for(int i = 0; i < delete.size(); i++){
+                            deleteItem[i] = delete.get(i);
                         }
                     } else {
                         if(data.getBooleanExtra("importantSetting", false)){
                             listItem.add(new Item(titleText, colorDefault));
+                            delete.remove(position);
+                            delete.add(isChangeItemClick);
                         }else {
                             listItem.add(position, new Item(titleText, colorDefault));
                         }
-                        if(isChecked){
-                            deleteItem[position] = true;
+                        for(int i = 0; i < delete.size(); i++){
+                            deleteItem[i] = delete.get(i);
                         }
                     }
                     break;
             }
             adapter = new ListAdapter(this, R.layout.activity_list_view_item, listItem, deleteItem);
             list.setAdapter(adapter);
-            list.clearChoices();
         }
     }
 }
